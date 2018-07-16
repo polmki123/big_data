@@ -1,0 +1,34 @@
+%새로만들기 
+centos
+ID를 새롭게 만든다. 
+암호 설정 
+SSH설정 
+리스소 그룹 
+위치 설정 (대한민국 중부)
+자동 종료 설정 가능 
+SSH(22)포트로 
+공용 ip 
+외부 ip 52.231.68.122
+id : dennis1945
+pwd : Pa$$w0rd123!@#
+
+내부 ip는 10.0.1.4로 되어 있는데 이 ip는 언제든 유동적
+
+인바운드 아웃바운드는 포트를 고르는 것이다. 방화벽은 이렇게 설정가능하다 
+
+Data Lake Store -> 좀 많이 비쌈 
+
+HDInsight cluster 설치 
+oozie 
+sqoop
+pig
+YARN
+HDFS가 다 설치 되어 있음 
+
+dennis1945-ssh.azurehdinsight.net
+id : sshuser
+pwd : Pa$$w0rd123!@#
+
+configs 를 들어가면 확인 할 수 있다
+
+-report 기본적인 정보와 상태 출력  (hdfs dfsadmin -report. 

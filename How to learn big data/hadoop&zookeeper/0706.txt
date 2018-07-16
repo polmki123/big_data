@@ -1,0 +1,40 @@
+Server01
+192.168.111.128
+Server02
+192.168.111.129
+Server03	
+192.168.111.130
+
+conf/
+hadoop-env.sh - > JAVA_HOME, PIDS
+masters -> Server01 // 2.0 버전부터는 사라짐 
+slaves -> Server02, Server03
+core-site.xml
+hdfd-site.xml
+mapred-site.xml
+
+Hadoop Core Components
+	HDFS(분산저장관리)
+	Mapreduce Batch Processing
+
+항상 hadoop-data 를 제거 
+bin/hadoop namenode -format //처음 구동시에만 적용 
+
+프로토 버프를 먼저 다운로드 
+
+그다음에 2.7.6버전을 다운로드 
+pid 세팅 변경 /home/hadoop/hadoop-2.7.6/pids 
+
+sbin/start-dfs.sh //DataNode,NameNode,cd h	
+sbin/start-yarn.sh //resourcemanage, Nodemanager
+
+bin/hdfs dfs -mkdir /user
+bin/hdfs dfs -mkdir /user/hadoobin
+bin/hdfs dfs -mkdir /user/hadoop/conf
+bin/hdfs dfs -put etc/hadoop/hadoop-env.sh conf
+
+scp -r hadoop-2.7.6 hadoop@server02:/home/hadoop
+scp -r hadoop-2.7.6 hadoop@server03:/home/hadoop
+
+zookeeper 여러대의 컴퓨터가 연결되어 마치 하나처럼 데이터를 공유하는 프로그램
+bin/zcli.sh 

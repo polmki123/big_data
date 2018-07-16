@@ -1,0 +1,97 @@
+mysql install 
+
+*linux
+slackware
+debian
+
+centos  7.0 -> mysql 5.7
+-client(mysql)
+ mysql -u root  -p
+ mysql -u hadoop -p
+-client 
+-server(mysqld) = RDBMS -> Storage Engine, Transaction Engin.....
+
+SQL(Structured Query Language)
+-SELECT...
+
+Like는 패턴 매칭을 위해 사용 하는 것 
+select * from employees where first_name like 'Zito'; for the parttern matching 
+select * from employees where first_name like '%Be%';
+select * from employees where last_name like '%mm%'; 
+regular expression( it look for the pattern )
+skip the first alphabet in the syntax 
+select * from employees where first_name like '_wun';
+for the specific sign 
+'wun\%' it can be search %.
+in 
+select * from employees where emp_no in (10001,10007)
+순차적으로 1,2,3정령 해야 할것 
+order by a,b 일 경우 a를 기준으로 하여 정렬됨 
+order by b,a 일 경우 b를 기준으로 하여 정렬 실시 
+create table sample01 (a int, b int); make a table 
+insert into sample01 values(1,1); for the insert value in the table some kind of material
+
+in the name, we use a 'as' change the name. exp) select a as mutiple -> table name multiple.
+systemctl status mysqld
+systemctl start mysqld. when set up the mysql.
+
+Count 
+select count(*) from member;
+
+offset
+select * from member limit 2 offset 0;
+select * from member limit 2 offset 2;
+select * from member limit 2,2;
+
+for the operation
+select a, b, (a+b) 'c' from sample01; is a same function on the 'as'
+select a, b, (a+b) 'c' from sample01; // alias is using for the long name.
+create table test(id int, testvalue float);
+
+select round(testvalue) from test;
+select round(testvalue,1) from test; up the number from behind first point.
+select round(testvalue, -2) from test; up to 10 unit.
+
+concat 
+select concat('1', '1');
+select substring('hello mysql', 3,2); it figure out from string 2,3 
+varchar(10) -> '1111' no space in value
+char(10) -> '1111      ' it can make some space 
+select trim('     hello sql     ') //it can make no space in string
+rtrim, ltrim // left, right space be removed.
+select length(id) from test; //appair about length 
+lpad('hello workld',20,'#')
+
+select year('2017-06-05');
+select month('2017-06-05');
+select day('2017-06-05');
+
+case statement
+select member_id, name, case
+    -> when sal > 12000 then 'over salary'
+    -> when sal <= 12000 then 'not over salary'
+    -> else 'nothing'
+    -> end 'compare'
+    -> from member;
+
+select member_id , name from member order by (case when bonus is null then name else member_id end); when is bouns existed order by bouns, or memeber_id
+
+GROUP BY
+select count(emp_no) title from titles group by title;
+'group by' only use behind string!!m, when using the other attribute there must be error
+but we can use this with count, avg, sum statement
+select member_id, jikwi, count(*), avg(sal), max(sal), min(sal)  title from member group by jikwi, member_id;
+
+IF 
+select name, if(sal>12000, 'over salary', 'not over salary') 'check' from member;
+
+JOIN
+ select dept.dept_id, dept.dept_name, member.name from dept inner join member on dept.dept_id = member.dept_id; // inner join 
+ other scenario 
+ select * from dept, member where dept.dept_id = member.dept_id
+
+ select dept.dept_id, dept.dept_name, member.name from dept inner join member on dept.dept_id = member.dept_id where dept.dept_id = 10;
+
+ left join 은 다 나옴 왼쪽에 있는 모든 형태가 
+ right join은 오른쪽에 join된 모든 경우가 다 나옴 
+ 

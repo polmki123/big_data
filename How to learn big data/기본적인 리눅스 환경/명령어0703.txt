@@ -1,0 +1,55 @@
+subnet 은 앞에 것만 동일하게 
+로컬 서브넷에 있는지 아니면 원격 네트워크에 있는지를 확인하는 데 사용됩니다.
+네트워크 주소와 호스트 주소를 확인할 수 없습니다
+네트워크 주소와 호스트 주소를 나누어 주는 중요 기재 중 하나 이다. 
+
+네트워크 192.168.111.
+호스트 	 	     129
+서브넷 마스크 255.255.255.0
+/etc/sysconfig/network-scripts/ifcfg-ens32
+호스트는 모두 1이거나 0인 이진 주소는 유효하지 않기에 사용 불가 0주소는 호스트를 지정않고 네트워크만을 지정하는데 사용됨 255는 네트워크 상의 모든 호스트에 메세지를 브로드 캐스트 하는데 사용
+ 
+네트워크 3개 호스트가 150인 경우 
+c클래스로 254개 배분보다 잘라서 넣는게 더 효율적 
+따라서 255.255.255.192로 서브넷 마스크를 사용할 경우 네트워크는
+192.168.111.0
+192.168.111.64
+192.168.111.128
+192.168.111.192 
+로각각 나누어서 사용할 수 있다. 
+
+
+게이트웨이 주소가 잘 맞아야 나갈때를 적절하게 고를 수 있다. 
+항상 변경후 네트워크를 적용하려면 reboot를 해야 한다는 것을 명심 
+
+systemctl restart network 
+systemctl status network 
+
+bash shell 이란 것은 bash라는 client를 연결하는 것 
+shelll를 연결하는 작업 
+yum을 하는 것은 yum.repos.d에 있는 것들을 검색한다 .
+
+인증authentication : 계정이 시스템에 접근할 수 있는 것 
+권한autherization : 계정이 시스템에 접근한후 내부 자원을 엑세스 할 수 있는 것
+
+l,d 파일 유형
+rwx : r read w write e excute
+
+chown/chgrp 소유자 권한 변경 
+
+test.sh 
+echo "user : " $USER
+
+
+bash test.sh 혹은 chmod로 764로 변경하여 실행권한을 준뒤
+./test.sh로 실행 
+
+ln 은 simple link 로 어떤 프로그램의 바로가기를 만드는 과정 
+
+방화벽 중지 명령어 방화벽이 열려 있을시 잘 안될 수 가 있다 .
+systemctl stop firewalld 
+systemctl disable firewalld 
+
+자바 버전 없음 
+java -version
+javac -version 

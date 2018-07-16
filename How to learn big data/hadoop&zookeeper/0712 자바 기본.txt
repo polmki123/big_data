@@ -1,0 +1,163 @@
+Java Programing 
+Class vs Object 
+static 미리 프로그램에 적재 하기 위해 쓰임 
+String[] args  미리 만들어진 배열 
+객체 자체에는 이름이란 속성이 존재한다고 정의 하기위해 우리는 class를 만든다. 
+메모리에서는 적재되어서 존재한다. 
+
+%%Main code 
+public class Test01 { //extends Object 가 내포 되어 있다. 
+
+	public static void main(String[] args) { //static 미리 적재 되어서 사용된다. 
+//		Student stu = new Student(); // 참조하여 만들어 둠 
+//		Student stu2 = new Student();
+//		
+//		Integer a = 1; // value 타입
+//		int b = a; // reference 타입 이 경우 그냥 a 값을 복사해서 사용 하게 된다. 
+//				// 계속해서 이럴 경우 복사해서 사용함으로 공간을 많이 차지 하게 된다. 
+//		Student stu3 = new Student();
+//		Student stu4 = stu3; // 이 경우 stu4가 stu3를 참조해서 사용된다. 즉 서로가 연결되어 사용 된다. 
+//		b = 3 ;
+//		stu3.name = "이순신";
+//		stu4.name = "감자";
+//		System.out.println(a + b );
+//		System.out.println(stu3.name);
+//		System.out.println(stu4.name); 
+		
+		Student stu5 = new Student(); //class를 선언하는 이유 데이터를 담아두는 형태 이다. 
+		stu5.setName("이순신"); 
+		stu5.gotoSchool();
+		Student stu6 = stu5; // stu5는  가르키는 객체가 같아 진다. 
+		stu6.gotoSchool();
+		Student stu7 =new Student();
+		stu7.gotoSchool();
+		Test(stu7);
+		Object o = stu7;
+		Employee.work();// 이렇게 쓰면 바로 바로 쓰고 static 공간을 활용하기에 더 만흥ㄴ 메모리를 줄일 수 잇다. 
+		Student stu8 = new Student();
+		Student stu9 = new Student("강감찬");
+		stu9.gotoSchool();
+		Employee.work("배트맨");
+	}
+	static void Test(Student s ) { // student s = stu7  이 구조 자체를 static에 넣어서 사용한다. 이경우 바로 static에 올라가져 잇기에 사용시에 더 빠르게 사용 될 수 있다. 
+		s.gotoSchool();
+	}
+}
+
+%%student 
+public class Student {
+	public Student() { // 생성자 이면서 return 타입이 없다  default constructor 
+		this.name = "홍길동 "; 
+	}
+	public Student(String name) {//overloading 
+		this.name = name;
+	}
+	public Student(int age) {
+		this.age = age;
+	}
+	public void gotoSchool() {
+		System.out.println(this.name);
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	private String name; //Member's variable 
+	private int age;
+}
+%% Employee
+public class Employee {
+	public static void work() {
+		System.out.println("go to work");
+	}
+	public static void work(String name) { // method overloading 
+		System.out.println(name + "일한다.");
+	}
+}
+
+
+Primitive, Value Type(값 타입 )(int, String, Boolean,  ) vs Referenc Type(참조 타입)
+class로 만들어서 사용 되는 객체의 경우 객체 공간을 만든뒤 그곳을 참조해서 사용한다. 
+만약 stu4 라는 객체를 만들고 stu5 = stu4 로 로직을 세울경우 stu4,stu5가 같은 공간을 가리키게 된다.
+캡슐화(Encapsulation) 
+다형성(Polymorphism)
+상속성(Inheritance)
+추상화(Abstraction)
+Classes 코드
+Objects 메모리에 올라가는것 
+Instance 객체랑 비슷 객체가 생성시 나오는 것 
+Method
+Message Parsing 
+
+* Local, Class variables
+
+* Constructor 생성자 public "class 명"형식으로 선언한뒤 안에 값을 넣어 초기화 시킨다. 
+
+* OverLoading -> Class안에서 사용되는 메소드의 이름을 동일하게 쓰면서 파라미터의 개수, 타입이 틀린 경우 가능 (한개가 들어와도 이름이 같은 것을 호출해서 사용)
+
+* 상속성 Inheritance 
+
+* 인터페이스 interface -> 개체를 reference만 받을 수 있다. 안의 내용은 그저 변수 선언만 
+한는 상태이고 사용시에는 implement를 써서 그 안의 method를 정의하고 사용하면 된다. 구현이 안되
+어 있어 규격화가 되어 있지 않다. 좀 더 flexible 하다 
+
+*추상화 (abstract) -> 일부는 선언이 되어있고 일부는 선언이 안되어 있는 형태 
+올라가면 올라갈 수로  generalization 되고 내려오면 내려올 수록 specialization 되어 있다. 
+이렇게 사용 하는 이유는 코드를 재사용 하기 위해서 이렇게 사용 한다. 
+객체 
+- 상태 
+- 동작 
+public class Test04 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+//		Database db = new Mysql();
+//		db.open();
+//		db.cloes();
+		Mysql mysql = new Mysql();
+		mysql.open();
+		mysql.select();
+		mysql.cloes();
+		Oracle oracle = new Oracle();
+		oracle.open();
+		oracle.select();
+		oracle.cloes();
+		// 하위에서 상위를 가리킬 떄는 implicit cast이다. 
+		Database db = mysql;
+		db.open();
+		db.cloes();
+		Database db1 = new Database();
+		// 상위에서 하위 가리킬 때에는 explicit cast 
+		Mysql mysql1 = (Mysql)db1;
+		Database db2 = new Mysql(); // 이럴 경우 overriding 된 method가 호출 된다. 
+		
+		Object o = mysql; //가장 상위에 object 클래스 잉다. 그렇지만 o는 mysql에서 정의 된 함수를 거의 사용 할 수 가 없다.  
+	}
+	static void TestDB(Object o) {
+		Mysql s = (Mysql)o;
+		s.select();
+	}
+}
+
+C언어 의 경우 전역변수를 선언하여 사용하면 나중에 점차 지나갈떄 더 많은 연관관계를
+가지기에 점점더 코드가 길어 진다. 
+구조화된 프로그램 , 절차 지향적 언어  순차적으로 읽어드림 
+엔진 -> 차체 -> 핸들 -> 의자 -> 바퀴 이런 식으로 만들어가며 이들은 서로 분리되면 안되고 순서가 틀려서도 안되며 하나가 고장 나면 전체 기능이 마비되도록 설계되었다고 가정해봅시다.
+
+객체지향 언어는 매소드와 관련된 것을 하나의 class로 정의하여 사용 하기에
+연관성을 높이고 서로간의 커플링을 낮춘다. 
+상속이란 개념을 이용해서 재사용도 편하게 해준다. 
+객체지향의 정의를 살펴보면 객체지향이란 실제 세계를 모델링하여 소프트웨어를 개발하는 방법입니다. 객체지향 프로그래밍에서는 데이터와 절차를 하나의 덩어리로 묶어서 생각하게 됩니다.\
+
+*Generics
+Class<>
+Method<>
+Interface<>
+E - Element(Java FrameWork )
+K ey
+V alue
+N umber
+T type
+S ,U ,V 
+
+람다 함수 
+(a , b ) = > ... 

@@ -1,0 +1,45 @@
+thomas194511@gmail.com
+
+010.4741.1800
+
+hadoop JAVA	
+
+Work bancy
+
+K-ICT
+
+oop 
+
+overding
+
+design pattern
+
+IOC container
+
+scale-up hardware upgrade
+
+scale-out	more computer parallel
+
+transcation 
+
+OLTP 우리가 아는 기본적인 데이터
+OLAP 한번 만들면 지우지 않음 index가 굉장히 힘듬
+
+처리 관계형, 비관계형, 스트링
+
+배열은 colum 아니면 따로 일반
+
+출력은 다양하게 
+
+ICT 계정 만들기 
+
+mstsc
+
+eduuser
+hello
+
+client /server **한계가 있음 서버 크기에서
+탐색기 / ...
+웹브라우저/ 웹서버 ** 
+
+whoami

@@ -1,0 +1,47 @@
+mysql install 
+
+*linux
+slackware
+debian
+
+centos  7.0 -> mysql 5.7
+-client(mysql)
+ mysql -u root  -p
+ mysql -u hadoop -p
+-client 
+-server(mysqld) = RDBMS -> Storage Engine, Transaction Engin.....
+
+SQL(Structured Query Language)
+-SELECT...
+
+Like는 패턴 매칭을 위해 사용 하는 것 
+select * from employees where first_name like 'Zito'; for the parttern matching 
+select * from employees where first_name like '%Be%';
+select * from employees where last_name like '%mm%'; 
+regular expression( it look for the pattern )
+skip the first alphabet in the syntax 
+select * from employees where first_name like '_wun';
+for the specific sign 
+'wun\%' it can be search %.
+in 
+select * from employees where emp_no in (10001,10007)
+순차적으로 1,2,3정령 해야 할것 
+order by a,b 일 경우 a를 기준으로 하여 정렬됨 
+order by b,a 일 경우 b를 기준으로 하여 정렬 실시 
+create table sample01 (a int, b int); make a table 
+insert into sample01 values(1,1); for the insert value in the table some kind of material
+
+in the name, we use a 'as' change the name. exp) select a as mutiple -> table name multiple.
+systemctl status mysqld
+systemctl start mysqld. when set up the mysql.
+
+Count 
+select count(*) from member;
+
+offset
+select * from member limit 2 offset 0;
+select * from member limit 2 offset 2;
+select * from member limit 2,2;
+
+for the operation
+select a, b, (a+b) 'c' from sample01; is a same function on the 'as'

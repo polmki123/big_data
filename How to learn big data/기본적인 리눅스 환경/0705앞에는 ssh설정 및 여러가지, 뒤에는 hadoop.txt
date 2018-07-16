@@ -1,0 +1,104 @@
+실행 권한을 주는 것 chmod 755 , 644, 777 
+변수 대입 시 좌우 공백 x 
+str="ls -l anaconda-ks.cfg"
+eval $str //명령문을 실행해 버린다. 
+
+ssh-keygen -t rsa 로 키를 생성한후 
+public key를 authorized_keys로 이름을 변경한뒤에 
+scp를 통하여 상대 컴퓨터로 전송 
+그 뒤에 상대 컴퓨터에서 .ssh 권한을 755로 변경한뒤에는 작동이 잘 될 것이다.  
+
+puttygen과 putty를 사용하여 로그인을 편하게 함 
+putty를 이용하여 로그인시 centos에서 만든 private 키를 puttygen에서 그냥 한번 변형 시켜준후 저장하여 사용 
+안 그러면 사용 불가능 
+
+DNS 설정에 대한 기본적인 정보
+
+hadoop
+많은 데이터를 처리 하는데 굉장히 유용하다 데이터가 늘어나도 노드를 추가하면 그만이다.
+그러나 요즘엔 노드가 많으면 전기세가 나옴으로 그냥 클라우드에 저장
+비관계형 저장소 이다. 
+
+hadoop core components
+- MapReduce Batch Processing : 처리 
+- HDFS (Hadoop Distributed File System) : 저장 
+
+Hadoop 1.x (jdk .17)
+Master - slave architecture 단점 master죽으면 다죽음 
+Mapreduce 문제 각 slave마다 cpu 사용량이 달라 질수 있는데 항상 고정 
+-standalone
+-가상분산모드
+-완전분산모드s
+
+Hadoop 2.7.6 (jdk1.8)
+namenode 이중화 
+slave에서 자원 사용량이 flexible하게 조절 할 수 있게 되었다. 
+-standalone
+-가상분산모드
+-완전분산모드
+
+JAVA 환경변수를 넣어 줄 때 
+루트의 경우 /etc/pro_file
+사용자의 경우 /home/사용자/.bash_profile
+export JAVA_HOME=/usr/java/default
+export PATH=$PATH:$JAVA_HOME/bin
+export CLASSPATH=.:$JAVA_HOME/jre/lib:$JAVA_HOME/bin:$JAVA_HOME/lib/tools.jar
+이것들을 다 추가 
+
+hadoop_1.2.1 tar -xvf
+conf/ 
+	hadoop-env.sh
+	masters
+	slaves
+	core-site.xml
+	hdfs-site.xml
+	mapred-site.xml
+
+처음에는 hadoop-env.sh에 들어가서 java 경로를 새로이 설정한다
+export JAVA_HOME=/usr/java/default 로 변경 보통이 경로 
+
+core-site.xml master slave 설정 
+hdfs-site.xml replication 설정
+mapred-site.xml job 설정
+
+HDFS -> bin/start-dfs.sh
+-namenode
+-datanode
+-secondarynamenode
+http://192.168.111.128:50070
+
+MapReduce Batch Proccessing -> bin/start-mapred.sh, bin/stop-mapre.sh
+-jobtracker
+-tasktracker
+
+bin/start-all.sh
+bin/stop-all.sh
+
+window에도 추가 
+c:windows/system3/drivers/etc/host
+에 우리 서버 추가 
+
+bin/start-mapred.sh
+Job과 tracker를 포함 
+
+test.txt
+i am a boy
+i am a girl
+bin/hadoop fs -mkdir input //hadoop 에 dir 생성
+bin/hadoop fs -put ./test.txt input/ //input dir에 test.txt 넘기기 
+bin/hadoop jar hadoop-examples-1.2.1.jar wordcount input/test.txt ouput //JVM을 사용해서 wordcount 기능 이용 output에 저장하기 
+bin/hadoop fs -cat output/*
+
+이제 분산환경 정말로 구성 
+master는 name과 job만 
+slave는 data와 task만 
+
+그 전에 workstation에서 일단 cloning
+그 뒤에 edit에서 mac어드레스 변경 후 사용 
+vi /etc/sysconfig/network-scripts/ifcfg-ens32
+vi /etc/hosts
+vi /etc/hostname
+을 변경 
+
+vi core-site.xml
+vi hdfs-site.xml

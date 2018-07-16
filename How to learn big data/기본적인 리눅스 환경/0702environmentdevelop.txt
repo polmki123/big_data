@@ -1,0 +1,25 @@
+id : root
+pwd : hadoop
+
+id : hadoop
+pwd : hadoop
+
+putty 쓸시 똑같이 사용 
+
+ifconfig #현재 centos에서는 사용불능 왜냐면 아직 뭐가 없다 
+
+/etc 
+touch test.txt 
+vi test.txt 
+numti 
+수동으로 DHCP해제 수동으로 ip설정 
+system restart network
+
+systemctl start network // start network
+systemctl status network  // check network status 
+
+vi /etc/sysconfig/network-scripts/ifcfg-ens32 
+	NETMASK = 255.255.255.0
+	IPADDR = 192.168.111.2
+	GATEWAY = 192.168.111.128
+	DNS1 = 192.168.111.2

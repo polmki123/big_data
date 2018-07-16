@@ -1,0 +1,65 @@
+hadoop 1.x (MRv1)
+- HDFS 
+	NameNode, DataNode, SecondaryNameNode
+-MapReduce Batch Processing
+	JobTracker, TaskTracker
+
+hadoop 2.x (MRv2)
+-HDFS
+	NameNode, DataNode, SecondaryNameNode
+- YARN & MapReduce Batch Processing
+	ResourceManager(Application Manager, Scheduler)
+	NodeManager(Container -> Task Excution)
+
+hadoop 2.x HA(High Ability) 
+저널노드 (editslog를 자신이 실행되는 서버의 로컬 디스크에 저장)
+ditslog를 여러 서버에 복제하여 저장
+네임 노드는 저널 노드에 접근하기 위한 클라이언트가 되는데,
+액티브 네임 노드만 editslog를 저장할 권한이 있고,
+스탠바이 네임 노드는 조회만 요청 가능
+홀수 단위로만 실행할 수 있음
+
+
+App-Master - Yarn을 호출 및 할당 해줌 
+Yarn(child) - task 처리 
+scale-up : 기존의 하드웨어에 추가적으로 하드웨어 성능을 올리는 것 
+scale-out  : 병렬적으로 추가시켜 주는 것 
+
+HDFS는 관계형 데이터 아님 비관계형 데이터 수집 
+(단 사이즈는 3배가됨)
+파일을 분할하여 분배해준다 .
+기본적으로 64MB를 기준
+
+파일을 블록배치하여 파일을 더 안전하게 저장 
+NameNode는 이러한 분할된 데이터에 대한 위치정보를 저장하고 있다. (직접적으로 데이터를 저장하지는 않는다. )
+	- 클러스터 당 단일 인스턴스 (Data -FS image, editer )
+DataNode 
+	- 클러스터 각 노드에 하나의 인스턴스 
+
+Architecture
+	- DFS 
+
+Rebalancing 
+
+window hosts 재설정 하는 법
+C:\Windows\System32\drivers\etc 에서 다시 다 설정 
+
+vi로 .bash_profile에 PATH를 설정하고 난다음에 
+source .bash_profile을 사용하여 적용 시킴 
+
+hadoop 2.x 와 zookeeper 
+일단 처음에는 zookeeper를 실행시킨다. myid와 zoo.cfg를 잘 조절한뒤에 
+./bin/zkServer.sh start 
+서버 별로다켜 둔다.
+hadoop 2.x 에서 core-site, hadoop-env, hdfs-site, mapred-site, yarn-evn, yarn-site 
+을 설정한뒤 
+failover 프로그램 올리기 /bin/hdfs zkfc -formatZK
+저널모드 실행 ./sbin/hadoop-daemon.sh start journalnode 서버별 다 실행
+네임노드 실행 ./sbin/hadoop-daemon.sh start namenode 주 active 서버 
+failover 실행  ./sbin/hadoop-daemon.sh start zkfc zkfc실행 
+서버 2를 Standby로 두기 ./bin/hdfs namenode -bootstrapStandby 
+서버 2 namenode 실행 ./sbin/hadoop-daemon.sh start namenode 
+서버 2 ZK failover ./sbin/hadoop-daemon.sh start zkfailover controll 실행  
+
+
+

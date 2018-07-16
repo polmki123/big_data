@@ -1,0 +1,42 @@
+﻿* MySql 설치
+
+$ wget https://dev.mysql.com/get/mysql57-community-release-el7-9.noarch.rpm
+$ md5sum mysql57-community-release-el7-9.noarch.rpm
+$ sudo rpm -ivh mysql57-community-release-el7-9.noarch.rpm
+$ sudo yum install mysql-server
+$ sudo systemctl start mysqld
+
+* MySql 시작하기 
+$ sudo systemctl status mysqld
+$ sudo grep 'temporary password' /var/log/mysqld.log
+
+* MySql 설정
+$ sudo mysql_secure_installation
+----------------------------------------------------------------------------------------
+The existing password for the user account root has expired. Please set a new password.
+New password:
+----------------------------------------------------------------------------------------
+Estimated strength of the password: 100
+Change the password for root ? (Press y|Y for Yes, any other key for No) :
+----------------------------------------------------------------------------------------
+
+* MySql 접속 테스트 
+$ mysqladmin -u root -p
+
+* root 암호 변경 
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'Pa$$w0rd123';
+flush privileges; 
+
+- 사용자추가
+insert into user(host,user,authentication_string,ssl_cipher,x509_issuer,x509_subject) values('localhost','hadoop',password('Pa$$w0rd123'),'','',''); //로컬
+insert into user(host,user,authentication_string,ssl_cipher,x509_issuer,x509_subject) values('127.0.0.1','hadoop',password('Pa$$w0rd123'),'','',''); //로컬
+insert into user(host,user,authentication_string,ssl_cipher,x509_issuer,x509_subject) values('%','hadoop',password('Pa$$w0rd123'),'','',''); //외부
+flush privileges;
+
+- 권한추가
+grant all privileges on *.* to hadoop@localhost identified by 'Pa$$w0rd123' with grant option; //로컬
+grant all privileges on *.* to hadoop@127.0.0.1 identified by 'Pa$$w0rd123' with grant option; //로컬
+grant all privileges on *.* to 'hadoop'@'%' identified by 'Pa$$w0rd123' with grant option; //외부
+flush privileges;
+
+DDL에서 latin1을 utf-8로 고쳐서 시도하는 것 추천 

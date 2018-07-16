@@ -1,0 +1,77 @@
+package com.test2;
+import java.io.IOException;
+import java.util.StringTokenizer;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+public class WordCount {
+
+	public static class TokenizerMapper
+	extends Mapper<Object, Text, Text, IntWritable>{
+
+		private final static IntWritable one = new IntWritable(1);
+		private Text word = new Text();
+
+		public void map(Object key, Text value, Context context
+				) throws IOException, InterruptedException {
+			StringTokenizer itr = new StringTokenizer(value.toString());
+			while (itr.hasMoreTokens()) {
+				word.set(itr.nextToken()); // Text 타입 이기에 값을 집어 넣을 때는 Text.set으로 집어 넣게 된다. 
+				context.write(word, one); //map을 저장하면서 pipeline으로 저장하게 된다. key value로 들어가게 된다.  
+				// i , 1
+				// am, 1
+			}
+		}
+	}
+	//실제로 노드가 잇으면 Mapreduce -> resource manager , nodemanager 
+	// Resource manager에 submit 한번 실행시키면 무조건 생김 overwirte 
+	// Node manager에 자동적으로 생기게 됨 개별적으로 처리 하게 된다. 
+	// reduce task는 일단 하나 밖에 없기에 결과는 일단 하나 밖에 나오지 않는다. 
+	// 그래서 각각의 node manager에서 처리한 데이터를 reduce task로 모아서 한번에 처리 한다. 
+	// 그러나 어렇게 처리 하게 되면 잘 정리되면 쉽지만 잘 정리가 안되어 있을 경우 굉장히 어려워 진다. 이럴 때 partition을 나누어서 처리 할수 있게 해준다.
+	// 마치 관계형 데이터 처럼 사용할 수 있게 해준다. 마치 select name ,id from group by person 처럼 말이다. 
+	public static class IntSumReducer
+	extends Reducer<Text,IntWritable,Text,IntWritable> {
+		private IntWritable result = new IntWritable();
+
+		public void reduce(Text key, Iterable<IntWritable> values, // 셔플링이라는 기능을 사용하여 모아서 사용해준다. 
+				Context context
+				) throws IOException, InterruptedException {
+			int sum = 0;
+			for (IntWritable val : values) {
+				sum += val.get();
+			}
+			result.set(sum);
+			context.write(key, result);
+			// i,2 
+			// am, 2 
+			
+		}
+	}
+
+	public static void main(String[] args) throws Exception {
+		Configuration conf = new Configuration();
+		Job job = Job.getInstance(conf, "word count");
+		job.setJarByClass(WordCount.class);
+		job.setMapperClass(TokenizerMapper.class);
+		job.setCombinerClass(IntSumReducer.class);// reducer 전에 먼저 모아주는 작업
+		job.setReducerClass(IntSumReducer.class); 
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(IntWritable.class);
+		FileInputFormat.addInputPath(job, new Path(args[0]));
+		FileOutputFormat.setOutputPath(job, new Path(args[1]));
+		System.exit(job.waitForCompletion(true) ? 0 : 1); // true 가 0
+	}
+}
+// yarn jar ... jar com.test2.WordCount 
+// 기존에 처리하지 못하던 방대형 관계형 데이터를 처리 할 수 있게 해준다. */4171
+// debugging이 더 어렵다. 
+//

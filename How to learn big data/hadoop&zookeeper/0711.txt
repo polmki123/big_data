@@ -1,0 +1,20 @@
+put 
+경로로 파일을 복사 
+rmr 
+삭제하는 명령어 
+(이러한 명령어는 대부분 그냥 자바 코드로 짜여진 명령어 이다. )
+chmod
+chown 
+count 지정 된경로에 대한 전체 디렉터리, 파일 수 확인 
+
+clone 한뒤에 무조건 인터넷 
+
+safemode 일 경우 빠져나오는 법 
+hdfs dfsadmin -safemode leave 
+
+현재 일단 hadoop-example-master를 maveon으로 import 시킨 후에 적절하게 각각의 
+코드들을 전 부 수정한뒤 pom.xml를 다시 재설정 이전에 TestWordCount에서 사용했던
+pom을 그래도 복붙한다. (만약 위 과정 전에 코드에서 에러 표시가 뜨지 않는 다면오른쪽을 클릭후 
+maven 클릭 후 update 시킨다.) 
+위 과정을 다 끝내고 나면 run as -> configuration 이름을 package로 설정 그 다음 -> build -> update를 실행하여 마무리 짓는다. 
+그러면 beginner 쪽에 target에 파일이 생성 되어 있을 것이다. 

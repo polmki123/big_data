@@ -1,0 +1,115 @@
+Wordcount 각 단어별로 구획을 나누어 갯수를 세는 것
+test.txt
+i am a boy
+i am a girl
+
+ecllipse maven 
+TestLib
+java project로 일단 만들어 둔뒤
+그 담에 export를 누르고 jar로 export 실시 
+
+1. jar파일이란 : jar파일은 archive파일이다. 즉 여러개의 파일을 하나의 파일로 묶는
+jar명령을 사용하여 생성된다. 이 파일은 winzip에서 열어 볼 수 있으며, winzip에서 
+열어보면 여러개의 파일들이 디렉토리 정보를 가진채 들어 있다. (아무 jar파일을 직접
+클릭해 열어 보시라)
+
+인터 페이스 
+- 표준화된 구조가 존재 하기에 규약만 맞춰주면 사용할 수 있다. 
+- 관련된것만 수정해서 구현이 가능 
+
+TestRun
+똑같이 만들고 난뒤 오른쪽 클릭 build path -> configure buildpath -> Libraries에 jar파일 추가 
+
+캡슐화
+	 -get, set 
+상속성
+parent -child 관계 extend로 상속 받을 수 있다. 
+
+upcasting 의 경우
+static person
+static student extends person
+
+
+person s = new student(); // upcasting 방법 s 는 student에서 person에 정의 된 함수만 접근 가능 
+student s = (student)s; //downcasting 방법 s 는 이제 student에서 정의된 모든 함수 접근 가능 
+
+다향성(polymorphism)
+비슷한 기능에 상속 받은 child 들이 자신의 특성에 맞게 parent의 
+기능을 약간 수정하여 자신을 표현 하는 것 
+
+type cast -> ? type conversion 이 없으면 모든 변수를 일일이 설정해서 받아야 된다.
+	type conversion이 있으면 그럴 필요 없이 대부분의 변수를 받을 수 있다. 
+
+Maven Repository 
+일단 maven project를 생성한 다음 pom.xml를 수정해서 dependency를 변경시켜 준다.
+<dependencies> 얻고 싶은 정보들은 복붙 한다음에 </dependencies>를 사용해서 파일들을
+다운 받는다. 
+받아야 할 프로그램은 mapred core, hadoop core를 다운 받아야 한다. 
+그 다음에 우리 외부로
+
+그렇지만 환경이 다 막힌 경우에는 maven은 사용해서는 안된다. 
+
+현재 작성하는 wordcount는 우리가 jar를 통해서 할 수 있는 프로그램을 만드는 것이다 .
+Tokenizer : 단어를 끊어서 집어 넣는 것 
+TokenizerMAPPER : key value로 각각을 나눠 주는 것
+	Mapper<Object, string, string, Inger>
+	Mapper<Object, Text, Text, IntWritable> //읽을 경우 serialization을 진행한다. 
+	class(소스 코드) object(class를 통해 메모리에 적재된것 )
+	Mapreduce는 string은 text로 int는 intWritable로 타입을 재정의하여 사용한다. 
+	저장 방식이 다르기 때문에 
+	하둡에서 객체를 그대로 보내고 싶은데 객체안에 여러개의 데이터를 따로따로 보낼 수는 	
+	없음으로 직렬화 하여 한번에 보내주고 받은 곳에서는 이 데이터를 converting하여 
+	받게 된다. 
+
+input file or folder 
+i am a boy
+i am a girl
+
+* input split ( K1, V1) 입력
+0, i am a boy
+11, i am a girl
+
+Mapper<Object, Text, Text, IntWritable> 
+
+*output (K2, V2) 출력
+i, 1	| i, 1
+am, 1	| am, 1
+a, 1	| a, 1
+boy, 1    	| girl, 1
+
+
+
+IntSumReducer : key value형태를 추적 하는것 
+	
+* input 
+i, [1,1]
+am, [1.1]
+a, [1,1]
+boy, 1
+girl, 1 
+	
+Reducer<Text,IntWritable,Text,IntWritable>
+
+* output <K3,V3>
+i, 2
+am, 2
+a, 2
+boy, 1
+girl, 1 
+
+Server01 => stop-all.sh
+	=> zkServer.sh stop
+
+Server02	
+	=> zkServer.sh stop
+
+Server03	
+	=> zkServer.sh stop
+
+HA remove => Full Cluster Mode 
+새로이 변화시 clusterID 가 변하게 된다. 그렇기에 정말이지 새로 포맷할 경우 
+/home/hadoop/data/dfs/namenode/current 에서 verison에 clusterID가 변화게 됨으로
+아예 data파일을 삭제하고 실행해야한다.  
+
+yarn jar TestWordCount-0.0.1-SNAPSHOT.jar com.test2.WordCount conf output
+hadoop fs -cat output/*

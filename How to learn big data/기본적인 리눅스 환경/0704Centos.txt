@@ -1,0 +1,123 @@
+
+cron regulary start program at certain time. permanent is it keep going // keep going process
+	root run-parts /etc/cron.hourly
+	root run-parts /etc/cron.daily
+	root run-parts /etc/cron.weekly
+	root run-parts /etc/cron.monthly
+we can use this thing by cron.* set
+when we use this, we must check file like test.sh, or bash shell
+
+'at' is a temporary start program.  // just one time
+	at 3:00am tomorrow 
+	at 11:00am January 30
+	at now + 1 hours 
+
+ifup <device> ifdown <device> // network device on or off command 
+nslookup //we find our dns server in our computer, test the dns server
+
+www.test.co.kr 
+web.test.co.kr -> www.test.co.kr
+
+systemctl list-units
+systemctl list-units -t service // only named service prgram
+
+name 과 그 에 따른 ip주소를 연결 하는 작업 필요
+hosts 파일에 서버와 이름을같이 저장하여 연결 여부 확인 
+
+Dns 서버가 host서버에 없을시 ip로 추적하여 연결 있으면 host에서 먼저 확인 
+
+ps -ef | grep bash // check named bash process 
+ps -ef // look for all process 
+
+sort 하면 정렬하고 두개 적으면 append 
+
+servicesms 계속 실행 
+한번 시행시에는 socket
+
+circumstance value 
+HOME, PATH, LANG, TERM, PWD, SHELL, USER, DISPLAY, COLUMNS, LINES, PS1, PS2,
+BASH, BASH_VERSION, HISTFILE, HISTSIZE, HOSTNAME, USERNAME, LOGNAME, LS_COLORS, MAIL
+OSTYPE
+시스템 변수와 사용자변수가 다르게 저장될 수 도 있다. 
+echo $(환경변수) check
+export (환경변수) = 값 // If you want change Circumstance value(CV), check this one. 
+PATH는 원하는 명령어가 PATH경로에 있는지 확인 해보는 작업을 가지게 된다. 
+
+shell파일 생성시 바로 생성할 경우 권한이 없기에 작동 x 
+그래서 chmod로 권한을 준 뒤 실행하여 확인 
+
+바로바로 변수를 선언하여 사용할수 있음 모든 변수는 'string'으로 취급 좌우에는 무조건 공백 x 
+
+test1.sh
+#!/bin/sh
+echo '$user :' $USER
+echo 'input value'
+read value 
+echo '$value' = $value
+exit 0
+
+test2.sh
+#!/bin/sh
+num1=100
+num2=$num1 + 200
+echo $num2
+num3=`expr $num1 + 200` 작은 따옴표가 아니라 쉼표를 사용 
+echo $num3
+exit 0 
+
+test3.sh
+#!/bin/sh
+echo 'first <$0>'
+echo 'two <$1>'
+echo 'three <$2>'
+echo 'four <$3>'
+exit 0
+
+test4.sh
+if [ "woo" = $1 ] //in here must space in other syntax!!!!!! 
+then 
+	echo "correct"
+else
+	echo "not correct"
+fi
+exit 0
+// tip -n ,-z for string : -n "string " //string is not null, that's true
+	-z "string" :  
+
+test5.sh
+#!/bin/sh
+case "$1" in 
+	start)
+		echo "Start";;
+	stop)
+		echo "Stop";;
+	restart)
+		echo "Restart";;
+	*)
+		echo"Nothing";;
+esac
+exit 0 
+
+#!/bin/sh
+hap ( ) {
+	
+}
+
+*server01
+#yum install telnet-server telnet
+*server02
+#yum install telnet
+#yum install telnet-server
+
+telnet 을 통해서 서로간에 서버를 구축할수  있다. 
+yum install telnet-server telnet
+
+ssh
+#ssh root@server02
+
+server -> server02(root, hadoop)
+
+No passward though the server02
+ssh server02()
+
+Server => keygen (public key, private key) //public key를 내려준애들만 작동 

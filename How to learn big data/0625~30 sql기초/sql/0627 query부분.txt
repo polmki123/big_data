@@ -1,0 +1,39 @@
+업무 분석 
+모델링 방법 및 고찰 확인 
+개체와 관계 설정 개체에 대한 연관성 
+관계에 대해서 확인 
+SQL : Structured Query Language
+mysql>
+show databases;
+use employees;
+select * from dept_emp;
+desc employees;
+varchar(14) 열글자면 4자리 없어져 들어가짐 
+select data(now())
+select time(now())
+select * from titles limit 5; 
+select emp_no, title from titles limit 5;
+select * from titles where title = 'Staff';
+select * from employees where first_name = 'Georgi' limit 3;
+select * from employees where emp_no <> 10001// 10001과 같지 않는 사람
+select * from employees where emp_no > 10001 //10001보다 큰사람들
+select * from employees where emp_no > 10001 and emp_no < 10400
+select * from titles where title is null;
+select * from titles where title is not null;
+
+crtl + l 깨끗하게 만듬
+select count(*) from titles;
+select distinct title from titles; //겹치지 않는 모든 경우 탐색
+
+mysqld.service // 계속 가동중, socket //계속 열려있음 
+linux, unix :daemon(service), socket
+windows : service 
+
+select * from titles where emp_no between 10002 and 10006;
+select timestampdiff(MONTH, '2018-01-01', '2018-06-01')\
+convert
+round()
+data_format()
+lpad()앞에 문자를 채워줌 lpad('abced', 7,'*) from 
+select * from member order by member_id desc;
+select * from member order by member_id asc;

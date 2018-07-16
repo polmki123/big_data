@@ -1,0 +1,24 @@
+insert into sampe41(no, a,b) values(null, null, null);
+default 체크시 null 아닌 default 값이 들어 갑니다.
+delete * from where (condition);
+update * from set a = 'fdfd' where b= 2; 
+update sameple set a =xxx. where no = 2;\
+상관 쿼리 서브 쿼리 잘알기 
+
+스키마란 테이블 인덱스, 뷰를 포함한 데이터베이스 안에 존재하는 것을 의미 \
+
+create table test( int 11, varchar(20));
+alter table test add name2 varchar(20);
+alter table test modify name2 int(11);
+alter table test drop name2;
+drop table test;
+
+create table test (id int, name varchar(20), primary key(id)); x   
+drop tabke test;
+create table test(id int 11, namve varchar(30),constraint test_pk primary key(id));
+alter table test Drop constraint 
+create table test2(id int, name varchar(30));
+alter table test2 add constraint p_test primary key(id);
+
+oracle vm virtualBox
+VMware player

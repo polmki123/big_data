@@ -1,0 +1,27 @@
+실행 권한을 주는 것 chmod 755 , 644, 777 
+변수 대입 시 좌우 공백 x 
+str="ls -l anaconda-ks.cfg"
+eval $str //명령문을 실행해 버린다. 
+
+ssh-keygen -t rsa 로 키를 생성한후 
+public key를 authorized_keys로 이름을 변경한뒤에 
+scp를 통하여 상대 컴퓨터로 전송 
+그 뒤에 상대 컴퓨터에서 .ssh 권한을 755로 변경한뒤에는 작동이 잘 될 것이다.  
+
+puttygen과 putty를 사용하여 로그인을 편하게 함 
+
+DNS 설정에 대한 기본적인 정보
+
+hadoop
+많은 데이터를 처리 하는데 굉장히 유용하다 데이터가 늘어나도 노드를 추가하면 그만이다.
+그러나 요즘엔 노드가 많으면 전기세가 나옴으로 그냥 클라우드에 저장
+비관계형 저장소 이다. 
+
+hadoop core components
+- MapReduce Batch Processing : 처리 
+- HDFS (Hadoop Distributed File System) : 저장 
+
+Hadoop 1.x 
+Master - slave architecture 단점 master죽으면 다죽음 
+
+Hadoop 2.x
