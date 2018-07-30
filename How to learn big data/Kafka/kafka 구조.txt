@@ -1,0 +1,19 @@
+기본적으로 zookeeper설정을 따른다. 
+
+*single broker 구조 
+bin/kafka-server-start.sh config/server.properties
+bin/kafka-server-start.sh config/server.properties
+
+* Create Topic
+bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic Hello-Kafka
+* Topic list 확인 
+bin/kafka-topics.sh --list --zookeeper localhost:2181 
+*Delete Topic 
+bin/kafka-topics.sh --delete --zookeeper localhost:2181  --topic Hello-Kafka
+
+* Start Producer to Send Messages //Kafka는 기본적으로 9092로 디폴팅 하여 사용한다. 
+bin/kafka-console-producer.sh --broker-list localhost:9092 --topic Hello-Kafka
+ -> console application 이다. 
+
+* Start Consumer to Receive Messages
+bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic Hello-Kafka --from-beginning

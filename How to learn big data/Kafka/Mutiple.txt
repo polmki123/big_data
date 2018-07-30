@@ -1,0 +1,50 @@
+* Kafka 각각의 서버 설정 수정
+- config/server.properties 
+server.1=Server01:2888:3888
+server.2=Server02:2888:3888
+server.3=Server03:2888:3888
+data=/tmp/zookeeper 일경우
+각각의 서버 마다 /tmp/zookeeper/에 myid 만들고 1,2,3 입력 
+각 서버 의 server.properties는 제대로 다시 한번 설정 하도록 한다 특히
+서버의 time, socket속도등의 설정을 제대 해야 한다. 
+
+- Broker Server 1 (IP : 192.168.111.128)
+broker.id=1
+listeners=PLAINTEXT://:9092
+advertised.listeners=PLAINTEXT://Server01:9092
+advertised.host.name=Server01
+advertised.host.name=9092
+zookeeper.connect=Server01:2181, Server02:2181, Server03:2181
+zookeeper-server-start.sh -daemon $KAFKA_HOME/config/zookeeper.properties 이렇게 설정해두면 백그라운드에서도 잘 작동하게 된다. 
+
+- Broker Server 2 (IP : 192.168.111.129)
+broker.id=2
+listeners=PLAINTEXT://:9092
+advertised.listeners=PLAINTEXT://Server02:9092
+advertised.host.name=Server02
+advertised.host.name=9092
+zookeeper.connect=Server01:2181, Server02:2181, Server03:2181
+
+- Broker Server 3 (IP : 192.168.111.130)
+broker.id=3
+listeners=PLAINTEXT://:9092
+advertised.listeners=PLAINTEXT://Server03:9092
+advertised.host.name=Server03
+advertised.host.name=9092
+zookeeper.connect=Server01:2181, Server02:2181, Server03:2181
+
+$ bin/zookeeper-server-start.sh config/zookeeper.properties
+$ bin/kafka-server-start.sh config/server.properties
+
+* Creating a Topic
+$ bin/kafka-topics.sh --create --zookeeper Server01:2181, Server02:2181, Server03:2181 --replication-factor 3 --partitions 1 --topic A
+
+replication-factor : 인스턴스 개수
+partitions : 병렬 처리를 위한 개수
+
+$ bin/kafka-topics.sh --list --zookeeper Server01:2181, Server02:2181, Server03:2181
+$ bin/kafka-topics.sh --delete --zookeeper Server01:2181, Server02:2181, Server03:2181 --topic A
+$ bin/kafka-topics.sh --describe --zookeeper Server01:2181, Server02:2181, Server03:2181
+
+$ bin/kafka-console-producer.sh --broker-list Server01:9092,Server02:9092,Server03:9092 --topic A
+$ bin/kafka-console-consumer.sh --zookeeper Server01:2181,Server02:2181,Server03:2181 --topic A --from-beginning

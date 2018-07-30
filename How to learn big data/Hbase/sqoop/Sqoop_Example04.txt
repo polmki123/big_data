@@ -1,0 +1,7 @@
+sqoop import --connect jdbc:mysql://210.114.91.91:20481/employees?useSSL=false --username 'hadoop' --password 'Pa$$w0rd123' --query 'select employees.emp_no, dept_emp.dept_no from dept_emp inner join employees on(dept_emp.emp_no = employees.emp_no) WHERE $CONDITIONS' --split-by employees.emp_no --target-dir /user/hadoop/sqoopMySqlToHdfs7 --delete-target-dir
+
+sqoop codegen --connect jdbc:mysql://210.114.91.91:20481/employees?useSSL=false --username 'hadoop' --password 'Pa$$w0rd123' --table employees
+
+sqoop eval --connect jdbc:mysql://210.114.91.91:20481/employees?useSSL=false --username 'hadoop' --password 'Pa$$w0rd123' --query "select * from employees"
+
+

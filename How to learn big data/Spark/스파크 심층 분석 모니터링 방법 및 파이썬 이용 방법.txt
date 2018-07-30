@@ -1,0 +1,8 @@
+pyspark로 시작 
+spark cluster mode -> sbin/start-all.sh
+master. workers
+http://Server01:8080 Web UI
+http://Server01:4040 Job Monitor Ui
+
+spark-shell --master spark://kch:7077 master shell 로 접속하는 방법 
+

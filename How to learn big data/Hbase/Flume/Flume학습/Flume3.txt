@@ -1,0 +1,56 @@
+###############################################################
+# netcat 테스트 
+###############################################################
+agent.sources = netcat-source
+agent.channels = memory-channel
+agent.sinks = logger-sink
+
+agent.sources.netcat-source.type = netcat
+agent.sources.netcat-source.bind = localhost
+agent.sources.netcat-source.port = 44444
+
+agent.sinks.logger-sink.type = logger
+
+agent.channels.memory-channel.type = memory
+agent.channels.memory-channel.capacity = 1000
+agent.channels.memory-channel.transactionCapacity = 100
+
+agent.sources.netcat-source.channels = memory-channel
+agent.sinks.logger-sink.channel = memory-channel
+
+# 실행
+flume-ng agent --conf-file conf/flume-conf.properties -n agent -Dflume.root.logger=INFO,console
+
+###############################################################
+# netcat 테스트 HDFS
+###############################################################
+agent.sources = Netcat
+agent.channels = MemChannel
+agent.sinks = hdfs-sink
+
+agent.sources.Netcat.type = netcat
+agent.sources.Netcat.bind = localhost
+agent.sources.Netcat.port = 56565
+agent.sources.Netcat.selector.type = replicating
+
+agent.sinks.hdfs-sink.type = hdfs
+agent.sinks.hdfs-sink.hdfs.path = hdfs://server01:9000/user/hadoop/flume_folder/%y-%m-%d/%H%M/
+agent.sinks.hdfs-sink.hdfs.useLocalTimeStamp = true
+agent.sinks.hdfs-sink.hdfs.fileType = DataStream
+agent.sinks.hdfs-sink.hdfs.writeFormat = Text
+agent.sinks.hdfs-sink.hdfs.batchSize = 100
+agent.sinks.hdfs-sink.hdfs.rollSize = 0
+agent.sinks.hdfs-sink.hdfs.rollCount = 100
+
+agent.channels.MemChannel.type = memory
+agent.channels.MemChannel.capacity = 1000
+agent.channels.MemChannel.transactionCapacity = 100
+
+agent.sources.Netcat.channels = MemChannel
+agent.sinks.hdfs-sink.channel = MemChannel
+
+# 실행
+flume-ng agent --conf-file conf/flume-conf.properties -n agent -Dflume.root.logger=INFO,console
+
+
+

@@ -1,0 +1,97 @@
+cp zoo_sample.cfg zoo.cfg
+zoo.cfg
+dataDir = /home/hadoop/zookeeper-3.4.11/data
+
+$ mkdir ~/zookeeper-3.4.11/data
+$ cd bin
+$ ./zkServer.sh start
+$ ./zkServer.sh stop
+$ ./zkCli.sh
+$ ./zkServer.sh status
+
+* Zookeeper ensemble mode
+$ vi zoo.cfg
+server.1=Server01:2888:3888
+server.2=Server02:2888:3888
+server.3=Server03:2888:3888
+
+$ cd ~
+$ scp -r zookeeper-3.4.11 server02:/home/hadoop/
+$ scp -r zookeeper-3.4.11 server03:/home/hadoop/
+
+$ rsync -av .bash_profile server02:/home/hadoop/
+$ rsync -av .bash_profile server02:/home/hadoop/
+
+* hbase 설정 
+$ cd ~
+$ cd hbase-1.2.6
+$ cd conf
+$ vi hbase-env.sh
+
+$ start-hbase.sh
+$ hbase shell
+ 
+  > list
+  > status
+  > version
+  > table_help
+  > whoami
+
+  > create 'emp', 'employee data', 'employee details'
+  > describe 'emp'
+
+  > put 'emp', '1', 'employee data:name', 'john'
+
+  > scan 'emp'
+  > get 'emp', '1'
+
+
+rowid, employee data, employee details
+       name, city     role, salary
+   1   johh, seoul    developer, 100
+   2   tom, incheon   developer, 200
+   3   thomas, U.K    senior developer, 300
+세 서버 모두 이렇게 설정 시켜줘야 한다. 
+$ cd ~/hbase-1.2.6/conf
+$ vi hbase-env.sh
+  export JAVA_HOME = /usr/java/default
+  export HBASE_PID_DIR=/home/hadoop/hbase-1.2.6/pids
+  export HBASE_MANAGES_ZK=false
+ 
+$vit hbase-site.xml
+<configuration>
+        <property>
+                <name>hbase.rootdir</name>
+                <value>hdfs://Server01:9000/hbase</value>
+        </property>
+        <property>
+                <name>hbase.zookeeper.quorum</name>
+                <value>Server01,Server02,Server03</value>
+        </property>
+        <property>
+                <name>hbase.zookeeper.property.dataDir</name>
+                <value>/home/hadoop/zookeeper-3.4.11/data</value>
+        </property>
+        <property>
+                <name>hbase.cluster.distributed</name>
+                <value>true</value>
+        </property>
+</configuration>
+
+$ vi regionservers
+  Server02
+  Server03
+$ cd ~
+$ scp -r hbase-1.2.6 Server02:/home/hadoop/
+
+$ start-all.sh (hadoop start)
+
+Server01 : namenode, resourcemanager, secondarynamenode,
+           QuorumPeerMain, HMaster
+Server02 : datanode, nodemanager, QuorumPeerMain, HRegionServer
+Server03 : datanode, nodemanager, QuorumPeerMain, HRegionServer
+
+start-hbase.sh
+http://192.168.111.128:16010 (Master 서버)
+http://192.168.111.129:16030 (RegionServer 서버)
+http://192.168.111.130:16030 (RegionServer 서버)

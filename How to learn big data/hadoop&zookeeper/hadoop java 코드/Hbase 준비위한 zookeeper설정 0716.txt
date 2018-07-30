@@ -1,0 +1,88 @@
+HDFS(Hadoop 
+
+일단 zookeeper zoo.cfg 서버다 지우기 
+stand alone 버전으로 맞추기 
+그리고 hbase 설치 1.2.6버전으로 
+
+*hbase
+$tar svfz habase
+$cd habase-1.2.6
+$cd conf
+$vi hbase-env.sh
+export JAVA_HOME=/usr/java/default
+$cd ~ 
+$mkdir hbase
+$mkdir hbase/hfiles 
+$cd ~/hbase-1.2.6/conf
+<property>
+<name>hbase.rootdir</name>
+<value>file:/home/hadoop/hbase/hfiles</value>
+</property>
+<property>
+<name>hbase.zookeeper.property.dataDir</name>
+<value>/home/hadoop/zookeeper/data</value>
+</property>
+
+hbase-site.xml
+
+
+1. StandAlone (not need zookeeper)
+hbase 자체 내에서 zookeeper존재 
+2. Pseudo-Distributed mod(HDFS(O)
+3. Full-Distributed Mode( zookeeper(O), HDFS(O))
+
+$cd bin/start-habase.sh 
+
+jps 시에 hbase가 작동 되게 된다. 
+bin $ ./hbase shell
+hbase(main):001:0 > list
+hbase(main):001:0 > status
+hbase(main):001:0 > base 
+hbase(main):001:0 > list
+hbase(main):001:0 > create 'emp', 'personal data', 'pro data'
+table -emp 형성 
+hbase(main):001:0 > list
+TABLE emp가 보이게 된다. 
+hbase(main):001:0 > disable 'emp' 
+사용하지 못하게 하는 옵션 , 삭제 대신의 옵션 
+hbase(main):001:0 > scan 'emp' 
+이럴경우 작동이 안됨 
+hbase(main):001:0 > enable 'emp'
+hbase(main):001:0 > put 'emp', '1','personal data:name', 'dennis'
+hbase(main):001:0 > put 'emp', '1','personal data:city' , 'test'
+hbase(main):001:0 > get 'emp', '1'
+columm만 넣는 다는 것에서 큰 차별점을 느낄 수 있다. 
+
+<property>
+<name>hbase.rootdir</name>
+<value>hdfs://Server04:9000/hbase</value>
+</property>
+<property>
+<name>hbase.cluster.distributed</name>
+<value>true</value>
+</property>
+<property>
+<name>hbase.zookeeper.property.dataDir</name>
+<value>/home/hadoop/zookeeper/data</value>
+</property>
+
+이렇게 설정할시 혼자서 서버를 받고 hbase가 적용됨으로 
+ start-habase.sh ->
+HMaster // 주서버
+HRegionServer // 분산 서버 
+HQuorumPeer //zookeeper process임에도 불구하고 hbase를 실행하면 올라가져 있다. 
+가 생성되게 된다. 
+Nosql의 일종으로 속도를 빠르게 하기 위해 큰 사이즈의 big table를 굉장히 많은 데이터가 한 구조에 많이
+들어가 있는 형태이다. 
+harding 한다 데이터 구조를 나누어서 저장 한다. shard 디스크 단위로 나누어 준다. 
+
+create 'test', 'cf'
+put 'test', 'seq1', 'cf:a', 'value1'
+put 'test', 'seq1', 'cf:b', 'value2'
+put 'test', 'seq1', 'cf:c', 'value3'
+put 'test', 'seq1', 'cf:d', 'value4'
+
+server04:16010 데이터 확인 하는 곳
+
+No
+Redis vs memache 

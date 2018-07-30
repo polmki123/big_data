@@ -1,0 +1,23 @@
+H-base는 cf라는 것을 먼저 만들고 put를 사용하여 data를 집어 넣는다. 
+
+OLTP는 읽기만 할수 있고, 쇼핑몰 트랙잭션 프로세스에 행과 열에 맞게
+OLAP는 데이터 분석을 위해, 열 기반 데이터 베이스 
+
+Hbase 는 동시성 제어가 어렵다. (트랙잭션이 없기에 )
+삭제 시에도 disable기능을 사용한다. 
+데이터를 비정규화 시켜 사용 
+
+Hadoop(Batch), HBase(NoSQL), Search Engine 
+Hadoop은 문자를 parsing 하여 검색하는 기능이 없다. 
+
+메일 본문  LIKE '%test'
+
+Search Engine(Elastic search) 주로 사용 
+Hbase는 선형적으로 확장 가능함 
+
+주요 요소 
+Client Library
+A Master Server
+Region Server
+ 
+MasterServer는 zookeeper도움 받음 특히 분산 클러스터 상태를 유지 관리하는데 도움을 받음 

@@ -1,0 +1,17 @@
+* Incremental Append
+sqoop import --connect jdbc:mysql://210.114.91.91:20481/employees?useSSL=false --username 'hadoop' --password 'Pa$$w0rd123' --table employees --incremental append --check-column employees.emp_no --last-value 10000 -m 1 --target-dir /user/hadoop/sqoopMySqlToHdfs8
+
+* Incremental Last Modified
+sqoop import --connect jdbc:mysql://210.114.91.91:20481/employees?useSSL=false --username 'hadoop' --password 'Pa$$w0rd123' --table employes --incremental lastmodified --check-column employees.hire_date --last-value 2017-10-23 -m 1 --target-dir /user/hadoop/sqoopMySqlToHdfs9
+
+* Create a Sqoop Job
+// 미리 명령어를 설정해 두는 기능 나중에 원할때 작동 하면 그 명령어 실행 
+// java-json.jar를 미리 저장해 두어야 한다. lib 파일에 
+sqoop job --create myjob1 -- import --connect jdbc:mysql://210.114.91.91:20481/employees?useSSL=false --username 'hadoop' --password 'Pa$$w0rd123' --table employees --incremental lastmodified --check-column employees.hire_date --last-value 2017-10-24 -m 1 --target-dir /user/hadoop/sqoopMySqlToHdfs10
+
+sqoop job --create myjob1 -- list-databases --connect jdbc:mysql://210.114.91.91:20481/?useSSL=false --username 'hadoop' --password 'Pa$$w0rd123'
+
+* To manage the job
+sqoop job --exec myjob1
+sqoop job --delete myjob1
+sqoop job --show myjob1

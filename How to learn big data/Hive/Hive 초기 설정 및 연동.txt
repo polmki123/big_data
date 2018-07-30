@@ -1,0 +1,67 @@
+**HIVE**
+SQL처리 문에 익숙한 사람들을 위해서 만들어진 언어 이다. 
+비전용은 안됨?
+mapreduce나 다양한 기능들이 굉장히 쉽게 구현 할 수 있다. 
+Hivew는 
+RD는 아니다. 
+Design for OnLine Transaction Processing(OLTP)아님
+Language for real-time quirey는 아니다. 
+
+하이브는 메타스토어 라는 저장소를 만들어 하둡에서 처리된 메타 데이터의 구조를 메타스토어에 저장합니다. 
+데이터베이스 아님 그냥 호출해주는 라이브러리 
+OLAP 데이터가 변하지 않음 읽기 용 으로 설계 되었음 
+HiveOL또는 HQL이라는 쿼리를 위한 SQL형식 언어 제공 
+
+타이틀 정보가 없으면 안됨 
+
+Hive 2.x (derby) 더비 경량 데이터 베이스 -> 메타스토어를 구성 
+
+Hive 다운 
+그리고 connect파일을 옮기기 
+그리고 conf 에서 hive-env.sh.template를 hive-env.sh에서 hadoop 경로 재설정 
+apache-hive 파일에 폴더 만들기 conf 가 아니라 그냥 하이브 파일에서 
+실행되어야 한다. 
+
+하이브 메타 스토어를 초기화 별도의 메타스토어를 지정하지 않은 경우 이렇게 사용 
+./bin/schematool -initSchema -dbType derby 
+이 경우 metastore 생성 
+여기다가 데이터를 저장 하겠다는 뜻 
+site-xml로 설정을 바꾸면 재 설정 가능 
+hadoop fs -mkdir /tmp
+hadoop fs -mkdir /user/hive 
+그리고 각각 파일에 권한 부여 
+hadoop fs -chmod g+x /tmp
+hadoop fs -chmod g+x /user/hive/warehouse
+hadoop fs -chmod 777 /user/hive
+
+hive > create database userdb 
+hive > show databases;
+hive > use userdb;
+hive > create table employee(eid int, salary String , name String )
+hive > insert into employee(eid, salary, name) values(1,"1000","kola");
+hive > create table employee(eid int, name String, salary String);
+
+마리아 db 설치
+비번 : Pa$$w0rd1234
+yum install mariadb, mariadb-server
+mysql_secure_installation
+mysqladmin -u root -p version 
+
+* 접속 테스트 
+$ mysql -u root -p
+
+show databases
+
+> use mysql;
+
+- 사용자추가
+> insert into user(host,user,authentication_string,ssl_cipher,x509_issuer,x509_subject) values('localhost','hadoop',password('Pa$$w0rd123'),'','',''); //로컬
+> insert into user(host,user,authentication_string,ssl_cipher,x509_issuer,x509_subject) values('127.0.0.1','hadoop',password('Pa$$w0rd123'),'','',''); //로컬
+> insert into user(host,user,authentication_string,ssl_cipher,x509_issuer,x509_subject) values('%','hadoop',password('Pa$$w0rd123'),'','',''); //외부
+> flush privileges;
+
+- 권한추가
+> grant all privileges on *.* to hadoop@localhost identified by 'Pa$$w0rd123' with grant option; //로컬
+> grant all privileges on *.* to hadoop@127.0.0.1 identified by 'Pa$$w0rd123' with grant option; //로컬
+> grant all privileges on *.* to 'hadoop'@'%' identified by 'Pa$$w0rd123' with grant option; //외부
+> flush privileges;

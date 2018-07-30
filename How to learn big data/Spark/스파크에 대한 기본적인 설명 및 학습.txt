@@ -1,0 +1,38 @@
+Spark 
+
+스파크를 깔고 나면 2.2.2  hadoop 2.7를 깔도록 
+
+spark-env.sh 에 export JAVA_HOME=/usr/java/default 도 추가 
+slaves 에 client1, client2 를 추가 
+
+sbin/start-all.sh 로 실행 왜냐면 hadoop과 충돌이 일어남 
+kch:8080으로 확인 
+
+spark-shell로 스파크 접속 
+README.mk
+
+val inputfile = sc.textFile("README.md")
+val counts = inputfile.flatMap(line => line.split(" ") ).map(word => (word,1)).reduceByKey(_+_)
+
+파이썬으로 사용시 Ipython이라고 치면 작동 
+
+.bash_profile HADOOP_CONF_DIR 과 HADOOP_YARN_DIR 를 주석 처리 해야함 
+
+val words = inputfile.flatMap(line => line.split(" "))
+words.collect()를 하면 전체가 출력 
+val mapWords = words.map(word => (word,1)) //이렇게 할시 word,1로 모두 변환 됨 
+val counts = mapWords.reduceByKey{case(x,y) => x+y} // 키를 기준으로 해서 서로를 더해준다.  
+
+성능 : in_memory coumputing
+생산성 : API, 연산자 제공 
+통합된 엔진 : 대화식 쿼리, 스트림 처리,다양한 라이브러리 제공 
+Driver(main 실행 리소스 분산)  - cluster(처리 및 할당) - worker node로 구성됨 
+
+RDD란 늦게 생성 죽어도 다시 살아난다. immutable collection of objects
+Resilient Distributed Dataset 유지성이 강하고 파괴에 강하다. 
+스파크는 데이터가 메모리에서 로드되어 빠르고 작업간 데이터 공유가 빠르다. 
+
+Transforamtion 기존 데이터 집합에서 새로운 데이터 생성 map,filter 
+Action은 데이터 집합에서 계산을 수행후 결과를 드라이버 프로그램으로 반환 reduce, collect, 
+
+스파크와 하둡 연결 spark-shell --master spark://Server01:7077

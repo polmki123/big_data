@@ -1,0 +1,53 @@
+처리 보다 데이터 수집 시 장애가 생겨도 큐에 저장된 데이터를 보내는 등 유용 
+카프카는 전통적인 메시지 브로커를 대체함 
+하둡을 쓰지 않는 곳에서도 Kafka를 잘 사용한다. 
+구독자들에게 메세지를 보내줌 
+
+producer 1	broker1	consumer1
+producer 2	broker2	consumer2
+producer3	broker3	consumer3
+주키퍼를 이용해서 처리 많은 데이터 처리에 유용 
+비동기 처리 가능 
+
+동기 synchronization
+a,b
+a 라는 작업이 다 끝날 때까지 b 라는 작업 대기
+mutil thread와는 다른 작업 
+
+비동기 
+a 가 끝나지 않았는데 b 가 작업 될 수 있음 
+
+
+producer  - Topic(길) - Kafka Broker(파일 모으고<zookeeper>) - consumer group 
+
+꾀나 flume과 비슷하지만 조금 다르다 
+세가지 한번에 있는 flume과는다르게
+세개나 하나 하나 나누어 져 있다. 
+
+point to point Messaging System
+특정 하나의 메세지는 최대 하나의 소비자만 사용 가능 
+소비자가 대기열에서 메시지를 읽으면 해당 대기열의 메시지가 사라짐 
+
+Publish Subscribe Messaging system  게시 구독 메시징 시스템
+지점간 시스템과는 달리 소비자가 하나 이상의 topic 구독 가능 
+해당 주제 모든 메시지 사용 가능 
+앞단에 Flume으로 받고 kafka로 처리 하고 Hbase로 처리 가능  
+buffer를 두어 저장 및 보내기 가능?
+
+kafka 특징 
+분산 발행 가입
+kafka 메시지는 데이터 손실을 방지 하기 위해 디스크에 유지되고 클러스터 내에 복제
+spark는 처리 장치 데이터를 처리하기위 해 사용 
+storm은 클러스터 데이터를 처리하는데 사용 
+스트림 처리 유리 
+Topic -> 데이터를 저장하는 항목 따로 선언을 하지 않아도 디폴트 옵션으로 설정 됨 catagorize 
+Partition -> Topic을 나누는 것 
+Brokers -> 각 브로커에는 하나의 파티션이 있다고 가정 
+Producer -> 생산자가 브로커에 메시지를 게시 할 때마다 브로커는 마지막 세그먼트 파일에 메시지를 간단하게 추가함, 메시지는 파티션에 추가됨, 생산자는 원하는 파티션에 메시지 보내기 가능 
+
+하나의 노드에 여러개의 브로커를 만들어 둘 수 있다. clustering 구조를 만듬 
+producer는 Topic에 원하는 파티션에 데이터를 보낸다. producr는 데이터를 여러군데 나누어서 
+안정성을 보장 하며 데이터를 보낼 수 있다. 
+
+하나의 브로커만 있을 때는 그냥 싱글 브로커라 부르고
+여러개의 브로커가 있을 경우에 cluster라고 부른다. 

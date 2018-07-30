@@ -1,0 +1,6 @@
+만약에 hbase HA가 안될 경우 
+hadoop etc/hadoop -> core-site.xml, hdfs-site.xml
+-> hbase conf/core-site.xml hdfs-site.xml
+
+kafka connect hdfs, hbase
+kafka stream

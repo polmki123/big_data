@@ -1,0 +1,91 @@
+﻿* MySql 설치
+
+$ wget https://dev.mysql.com/get/mysql57-community-release-el7-9.noarch.rpm
+$ md5sum mysql57-community-release-el7-9.noarch.rpm
+$ sudo rpm -ivh mysql57-community-release-el7-9.noarch.rpm
+$ sudo yum install mysql-server
+$ sudo systemctl start mysqld
+
+* MySql 시작하기 
+$ sudo systemctl status mysqld
+$ sudo grep 'temporary password' /var/log/mysqld.log
+
+ systemctl status mariadb
+ systemctl start mariadb
+ systemctl enable mariadb
+
+* MySql 설정
+$ sudo mysql_secure_installation
+----------------------------------------------------------------------------------------
+The existing password for the user account root has expired. Please set a new password.
+New password:
+----------------------------------------------------------------------------------------
+Estimated strength of the password: 100
+Change the password for root ? (Press y|Y for Yes, any other key for No) :
+----------------------------------------------------------------------------------------
+
+$ wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.46.tar.gz
+
+* MySql 접속 테스트 
+$ mysql -u root -p
+show databases
+
+* root 암호 변경 
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'Pa$$w0rd123';
+flush privileges; 
+
+- 사용자추가
+insert into user(host,user,authentication_string,ssl_cipher,x509_issuer,x509_subject) values('localhost','hadoop',password('Pa$$w0rd123'),'','',''); //로컬
+insert into user(host,user,authentication_string,ssl_cipher,x509_issuer,x509_subject) values('127.0.0.1','hadoop',password('Pa$$w0rd123'),'','',''); //로컬
+insert into user(host,user,authentication_string,ssl_cipher,x509_issuer,x509_subject) values('%','hadoop',password('Pa$$w0rd123'),'','',''); //외부
+flush privileges;
+
+- 권한추가
+grant all privileges on *.* to hadoop@localhost identified by 'Pa$$w0rd123' with grant option; //로컬
+grant all privileges on *.* to hadoop@127.0.0.1 identified by 'Pa$$w0rd123' with grant option; //로컬
+grant all privileges on *.* to 'hadoop'@'%' identified by 'Pa$$w0rd123' with grant option; //외부
+flush privileges;
+
+
+* create database sampledb
+
+* create table
+create table testtbl(myid INT, mymessage VARCHAR(255), mydecimal DECIMAL(8,4));
+
+* sample data
+1,I am a boy,1.2
+2,You are a girl,2.3
+3,Are you a man,4.5
+
+* LOAD DATA LOCAL INFILE '/home/hadoop/sample_data' INTO TABLE testtbl COLUMNS TERMINATED BY ',';
+
+* mysql-connector-java
+http://ftp.kaist.ac.kr/mysql/Downloads/Connector-J/mysql-connector-java-5.1.45.tar.gz
+를 설치 풀고 jar를 파일을  ~/sqoop-1.4.7.bin_hadoop-2.6.0/lib/에 옮기기 
+
+그뒤 sqoop에서 conf로 들어간 뒤 sqoop-env-template.sh 를 sqoop-env.sh로 바꾼뒤
+common과 hadoop설정을 바꾸기
+ 
+*mysql 과sqoop 연결 
+
+ip 210.114.91.91
+port :20527
+id : hadoop
+pwd : Pa$$w0rd123
+
+./bin/sqoop list-databases --connect jdbc:mysql://210.114.91.91:20527/?useSSL=false --username 'hadoop' --password 'Pa$$w0rd123'
+Sql 데이터베이스 확인 
+./bin/sqoop import --connect jdbc:mysql://210.114.91.91:20527/employees?useSSL=false --username 'hadoop' --password 'Pa$$w0rd123' --table employees -m 1 --target-dir /user/hadoop/sqoopMySqlToHdfs 파일 가져 오기 
+
+sqoop import --connect jdbc:mysql://210.114.91.91:20527/employees?useSSL=false --username 'hadoop' --password 'Pa$$w0rd123' --table employees -m 1 --where 'emp_no>10003' --target-dir /user/hadoop/sqoopMySqlToHdfs2 emp_no이 10003보다 큰 경우에만 데이터 가져오기 
+
+sqoop import --connect jdbc:mysql://210.114.91.91:20527/employees?useSSL=false --username 'hadoop' --password 'Pa$$w0rd123' --table employees -m 1 --columns "emp_no" --target-dir /user/hadoop/sqoopMySqlToHdfs3 --delete-target-dir 원래 있던 directory내용 지우고 emp_no만 가져오기
+
+sqoop import --connect jdbc:mysql://210.114.91.91:20527/employees?useSSL=false --username 'hadoop' --password 'Pa$$w0rd123' --table employees --split-by first_name --target-dir /user/hadoop/sqoopMySqlToHdfs5
+ --delete-target-dir  split 해주는 방법 
+
+원하는 query도 집어 넣을 수 있따. 
+sqoop import --connect jdbc:mysql://210.114.91.91:20481/employees?useSSL=false --username 'hadoop' --password 'Pa$$w0rd123' --table employees --boundary-query "select min(emp_no), max(emp_no) from employees" --split-by emp_no --target-dir /user/hadoop/sqoopMySqlToHdfs6 --delete-target-dir
+이렇게 할시 우리가 평소에 쓰는 query를 그냥 사용한다고 생각하면 된다. 
+
+sqoop job --create 

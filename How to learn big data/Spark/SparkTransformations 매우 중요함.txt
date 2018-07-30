@@ -1,0 +1,99 @@
+val babyNames = sc.textFile("baby_names.csv")
+babyNames.count
+babyNames.first()
+val rows = babyNames.map(line => line.split(","))
+rows.map(row => row(2)).distinct.count
+val davidRows = rows.filter(row => row(1).contains("DAVID"))
+davidRows.count
+
+davidRows.filter(row => row(4).toInt > 10).count()
+davidRows.filter(row => row(4).toInt > 10).map( r => r(2) ).distinct.count
+
+val names = rows.map(name => (name(1),1))
+
+names.reduceByKey((a,b) => a + b).sortBy(_._2).foreach ( println _)
+(a,1)
+(a,1)
+--------> (a, (1,1,1,1,1,1,) - > (a,(1+1+1+1+1+1+1..) 이런 식으로 
+
+(a, b, am ........) flatMap
+(a,1,......) map
+
+
+val filteredRows = babyNames.filter(line => !line.contains("Count")).map(line => line.split(","))
+
+filteredRows.map ( n => (n(1), n(4).toInt)).reduceByKey((a,b) => a + b).sortBy(_._2).foreach (println _)
+reduceByKey((a,b) => a + b) = reduceByKey{case(x,y) => x+y} = reduceBykey(_ + _)
+savaAsTextFile("경로 및 이름") 으로 저장한다. 
+spark-shell -- > jar나 파일로 저장 
+
+** parallelize 과 flatMap과 Map의 차이를 보여줌 
+val testData = sc.parallelize(List("i am a boy", "you are a boy"), 2) //저장시에 2개로 나누어서 저장한다. 
+var wortd = testData.map( line => line.split(" ") -> Array(Array(i, am, a, boy), Array(you, are, a, boy))
+val test = testData.flatMap(line => line.split(" ")) ->  Array[String] = Array(i, am, a, boy, you, are, a, boy)
+
+
+* map(func)
+val rows = babyNames.map(line => line.split(","))
+
+* flatMap(func)
+sc.parallelize(List(1,2,3)).flatMap(x=>List(x,x,x)).collect
+sc.parallelize(List(1,2,3)).map(x=>List(x,x,x)).collect
+sc.parallelize(List(1,2,3)).flatMap(x=>List(x,x,x))
+sc.parallelize(List(1,2,3)).map(x=>List(x,x,x))
+
+* filter
+val file = sc.textFile("README.md")
+val errors = file.filter(line => line.contains("PYTHON"))
+
+* mapPartitions
+
+* mapPartitionsWithIndex
+
+* sample
+
+* Hammer Time
+
+* union
+val parallel = sc.parallelize(1 to 9)
+val par2 = sc.parallelize(5 to 15)
+parallel.union(par2).collect
+
+* intersection
+val parallel = sc.parallelize(1 to 9)
+val par2 = sc.parallelize(5 to 15)
+parallel.intersection(par2).collect
+
+* distinct
+val parallel = sc.parallelize(1 to 9)
+val par2 = sc.parallelize(5 to 15)
+parallel.union(par2).distinct.collect
+
+* The Keys
+val babyNames = sc.textFile("baby_names.csv")
+val rows = babyNames.map(line => line.split(","))
+
+* groupByKey
+val namesToCounties = rows.map(name => (name(1),name(2)))
+namesToCounties.groupByKey.collect
+
+* reduceByKey
+val filteredRows = babyNames.filter(line => !line.contains("Count")).map(line => line.split(","))
+filteredRows.map(n => (n(1),n(4).toInt)).reduceByKey((v1,v2) => v1 + v2).collect
+
+* aggragateByKey
+val filteredRows = babyNames.filter(line => !line.contains("Count")).map(line => line.split(","))
+filteredRows.map(n => (n(1),n(4).toInt)).reduceByKey((v1,v2) => v1 + v2).collect
+filteredRows.map ( n => (n(1), n(4))).aggregateByKey(0)((k,v) => v.toInt+k, (v,k) => k+v).sortBy(_._2).collect
+
+* sortByKey
+val filteredRows = babyNames.filter(line => !line.contains("Count")).map(line => line.split(","))
+filteredRows.map ( n => (n(1), n(4))).sortByKey().foreach (println _)
+filteredRows.map ( n => (n(1), n(4))).sortByKey(false).foreach (println _)
+
+* join
+val names1 = sc.parallelize(List("abe", "abby", "apple")).map(a => (a, 1))
+val names2 = sc.parallelize(List("apple", "beatty", "beatrice")).map(a => (a, 1))
+names1.join(names2).collect
+names1.leftOuterJoin(names2).collect
+names1.rightOuterJoin(names2).collect

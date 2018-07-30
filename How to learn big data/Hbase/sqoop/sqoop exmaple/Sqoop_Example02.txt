@@ -1,0 +1,22 @@
+* create database sampledb
+
+* create table
+create table testtbl(myid INT, mymessage VARCHAR(255), mydecimal DECIMAL(8,4));
+
+* sample data
+1,I am a boy,1.2
+2,You are a girl,2.3
+3,Are you a man,4.5
+
+* LOAD DATA LOCAL INFILE '/home/hadoop/sample_data' INTO TABLE testtbl COLUMNS TERMINATED BY ',';
+
+
+* sqoop import --connect jdbc:mysql://192.168.111.150/sampledb --username hadoop --password Pa$$w0rd1 --table testtbl --m 1
+
+bin/sqoop import --connect jdbc:mysql://192.168.111.150:3306/sampledb --username hadoop --password hadoop --m 1  --table testtbl --bindir /usr/local/sqoop/ --target-dir /user/sqoop/sqlimport/employee
+
+
+./bin/sqoop import --connect jdbc:mysql://192.168.111.132:3306/employees?useSSL=false --username 'hadoop' --password 'Pa$$w0rd123' --table employees -m 1 --target-dir /user/hadoop/sqoopMySqlToHdfs
+
+./bin/sqoop export --connect jdbc:mysql://192.168.111.132:3306/employees?useSSL=false --username 'hadoop' --password 'Pa$$w0rd123' --table employees2 -m 1 --export-dir /user/hadoop/sqoopMySqlToHdfs/part-m-00000
+

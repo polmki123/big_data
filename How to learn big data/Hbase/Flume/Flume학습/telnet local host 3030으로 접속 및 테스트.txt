@@ -1,0 +1,36 @@
+* telnet,telnet-server install
+yum install telnet telnet-server
+systemctl start telnet.socket
+systemctl enable telnet.socket
+
+agent.sources = netsource
+agent.sinks = hdfssink
+agent.channels = memorychannel
+
+agent.sources.netsource.type = netcat
+agent.sources.netsource.bind = localhost
+agent.sources.netsource.port = 3030
+agent.sources.netsource.interceptors = ts
+agent.sources.netsource.interceptors.ts.type = org.apache.flume.interceptor.TimestampInterceptor$Builder
+
+agent.sinks.hdfssink.type = hdfs
+agent.sinks.hdfssink.hdfs.path = hdfs://server01:9000/flume_network/%Y/%m/%d
+agent.sinks.hdfssink.hdfs.filePrefix = log
+agent.sinks.hdfssink.hdfs.rollInterval = 0
+agent.sinks.hdfssink.hdfs.rollCount = 30
+agent.sinks.hdfssink.hdfs.fileType = DataStream
+agent.sinks.hdfssink.channel = memorychannel
+
+agent.channels.memorychannel.type = memory
+agent.channels.memorychannel.capacity = 1000
+agent.channels.memorychannel.transactionCapacity = 100
+agent.sources.netsource.channels = memorychannel
+
+
+* telnet localhost 3030으로 접속해서 테스트
+
+./bin/flume-ng agent --conf-file conf/flume-conf2.properties -n agent -Dflume.root.logger=INFO,console
+
+curl telnet://localhost:3030
+
+hdfs dfs -cat /flume_network/2018/03/15/*

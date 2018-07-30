@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <property>
+        <name>hive.metastore.local</name>
+        <value>false</value> 
+    </property>
+    <property>
+        <name>javax.jdo.option.ConnectionURL</name>
+        <value>jdbc:mysql://192.168.111.128:3306/hive?createDatabaseIfNotExist=true</value>
+    </property>
+    <property>
+        <name>javax.jdo.option.ConnectionDriverName</name>
+        <value>com.mysql.jdbc.Driver</value>
+    </property>
+    <property>
+        <name>javax.jdo.option.ConnectionUserName</name>
+        <value>hadoop</value>
+    </property>
+    <property>
+        <name>javax.jdo.option.ConnectionPassword</name>
+        <value>Pa$$w0rd123</value>
+    </property>
+</configuration>
+
+bin/schematool - initSchema -dbType derby
+-> metastore_db
+
+bin/schematool - initSchema -dbType mysql 
+-> mysql -> 이렇게 해줘야 외부와 연결이 가능하면서 메타데이터를 생성할곳이 생겨
+연결 후에도 작동 가능하게 해준다. 

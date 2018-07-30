@@ -1,0 +1,87 @@
+* Agent1
+* send_agent.conf
+Agent1.sources = spooldir-source  
+Agent1.channels = file-channel
+Agent1.sinks = avro-sink
+ 
+Agent1.sources.spooldir-source.type = spooldir
+Agent1.sources.spooldir-source.spoolDir = /home/hadoop/spooldir
+ 
+Agent1.sinks.avro-sink.type = avro
+Agent1.sinks.avro-sink.hostname = 192.168.111.128 
+Agent1.sinks.avro-sink.port = 11111
+
+Agent1.channels.file-channel.type = file
+Agent1.channels.file-channel.checkpointDir = /home/hadoop/testflume/checkpoint/
+Agent1.channels.file-channel.dataDirs = /home/hadoop/testflume/data/
+ 
+Agent1.sources.spooldir-source.channels = file-channel
+Agent1.sinks.avro-sink.channel = file-channel
+
+*명령어
+flume-ng agent --conf-file $FLUME_HOME/conf/sender_agent.conf --name Agent1 -Dflume.root.logger=INFO, console 
+
+Zookeeper, hadoop 이 켜져 있어야 하는 상태임 
+Agent1(Sender) - Server02 -> sender_agent.conf
+- souce : spooldir /home/hadoop/spooldir
+- Channel : file 
+- Sink : avro
+
+* Agent2
+* receiver_agent.conf
+Agent2.sources = avro-source  
+Agent2.channels = file-channel
+Agent2.sinks = hdfs-sink
+ 
+Agent2.sources.avro-source.type = avro
+Agent2.sources.avro-source.bind = 0.0.0.0
+Agent2.sources.avro-source.port = 11111
+ 
+Agent2.sinks.hdfs-sink.type = hdfs
+Agent2.sinks.hdfs-sink.hdfs.path = hdfs://Server01:9000/user/hadoop/flume/
+Agent2.sinks.hdfs-sink.hdfs.rollInterval = 0
+Agent2.sinks.hdfs-sink.hdfs.rollSize = 0
+Agent2.sinks.hdfs-sink.hdfs.rollCount = 10000
+Agent2.sinks.hdfs-sink.hdfs.fileType = DataStream
+ 
+#Use a channel which buffers events in file
+Agent2.channels.file-channel.type = file
+Agent2.channels.file-channel.checkpointDir = /home/hadoop/testflume/checkpoint/
+Agent2.channels.file-channel.dataDirs = /home/hadoop/testflume/data/
+ 
+Agent2.sources.avro-source.channels = file-channel
+Agent2.sinks.hdfs-sink.channel = file-channel
+
+flume-ng agent --conf-file $FLUME_HOME/conf/receiver_agent.conf --name Agent2 -Dflume.root.logger=INFO, console 
+
+Agent2(Receiver)
+- source : avro
+- Channel :file
+- Sink : hbase 
+
+* NEW Agent2 hbase 로 변경해서 작동 가능 column데이터 처리 수월 
+* receiver_agent.conf
+Agent2.sources = avro-source  
+Agent2.channels = file-channel
+Agent2.sinks = hdfs-sink
+ 
+Agent2.sources.avro-source.type = avro
+Agent2.sources.avro-source.bind = 0.0.0.0
+Agent2.sources.avro-source.port = 11111
+ 
+Agent2.sinks.hdfs-sink.type = hdfs
+Agent2.sinks.hdfs-sink.hdfs.path = hdfs://Server01:9000/user/hadoop/flume/
+Agent2.sinks.hdfs-sink.hdfs.rollInterval = 0
+Agent2.sinks.hdfs-sink.hdfs.rollSize = 0
+Agent2.sinks.hdfs-sink.hdfs.rollCount = 10000
+Agent2.sinks.hdfs-sink.hdfs.fileType = DataStream
+ 
+#Use a channel which buffers events in file
+Agent2.channels.file-channel.type = file
+Agent2.channels.file-channel.checkpointDir = /home/hadoop/testflume/checkpoint/
+Agent2.channels.file-channel.dataDirs = /home/hadoop/testflume/data/
+ 
+Agent2.sources.avro-source.channels = file-channel
+Agent2.sinks.hdfs-sink.channel = file-channel
+
+flume-ng agent --conf-file $FLUME_HOME/conf/receiver_agent.conf --name Agent2 -Dflume.root.logger=INFO, console

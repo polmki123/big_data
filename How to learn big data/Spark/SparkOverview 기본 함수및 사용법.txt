@@ -1,0 +1,30 @@
+* Overview
+val babyNames = sc.textFile("hdfs://server01:9000/user/hadoop/spark_input/baby_names.csv")
+babyNames.count 
+babyNames.first()
+
+val rows = babyNames.map(line => line.split(","))
+rows.map(row => row(2)).distinct.count
+rows.collect
+val davidRows = rows.filter(row => row(1).contains("DAVID"))
+davidRows.count
+
+davidRows.filter(row => row(4).toInt > 10).count()
+davidRows.filter(row => row(4).toInt > 10).map( r => r(2) ).distinct.count
+val names = rows.map(name => (name(1),1))
+
+val filteredRows = babyNames.filter(line => !line.contains("Count")).map(line => line.split(","))
+
+* SPARK CONTEXT & RESILIENT DISTRIBUTED DATASETS(RDD)
+
+val babyNames = sc.textFile("baby_names.csv")
+
+* ACTIONS & TRANSFORMATIONS
+
+- Action
+babyNames.count()
+babyNames.first()
+
+- Transformations
+val rows = babyNames.map(line => line.split(","))
+val davidRows = rows.filter(row => row(1).contains("DAVID"))

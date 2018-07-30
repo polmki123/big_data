@@ -1,0 +1,6 @@
+BigData
+수집 sqoop, flume, kafka
+저장 hdfs, hbase
+처리 mapreduce spark
+분석 R, python
+텍스트 마이닝 

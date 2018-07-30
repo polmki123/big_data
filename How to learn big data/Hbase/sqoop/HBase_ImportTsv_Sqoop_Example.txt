@@ -1,0 +1,14 @@
+* ImportTsv 
+hbase org.apache.hadoop.hbase.mapreduce.ImportTsv -Dimporttsv.separator=',' -Dimporttsv.columns='HBASE_ROW_KEY, personal_data:name, personal_data:city, personal_data:age' personal /user/hadoop/test2
+
+* personal.csv
+2,tom,seoul,24
+3,john,incheon,27
+4,amy,seoul,26
+5,thomas,busan,30
+
+* personal table from hbase
+create 'personal', 'personal_data'
+
+* Sqoop usage MySql to HBase
+sqoop import --connect jdbc:mysql://210.114.91.91:20481/employees?useSSL=false --username 'hadoop' --password 'Pa$$w0rd123' --table employees --columns "emp_no,first_name,last_name" --hbase-table employees --column-family employees_cf --hbase-row-key emp_no -m 1

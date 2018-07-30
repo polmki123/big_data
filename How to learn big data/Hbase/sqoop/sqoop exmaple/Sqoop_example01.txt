@@ -1,0 +1,41 @@
+#Set path to where bin/hadoop is available
+export HADOOP_COMMON_HOME=/home/hadoop/hadoop-2.7.5
+
+#Set path to where hadoop-*-core.jar is available
+export HADOOP_MAPRED_HOME=/home/hadoop/hadoop-2.7.5
+
+sqoop 
+mysql-connector-java-5.1.46]$ cp mysql-connector-java-5.1.46-bin.jar ~/sqoop-1.4.7.bin__hadoop-2.6.0/lib/
+
+su
+nmtui
+
+**데이터 연결 하는 부분 
+./bin/sqoop list-databases --connect jdbc:mysql://210.114.91.91:20528/?useSSL=false --username 'hadoop' --password 'Pa$$w0rd123' // 내서버
+./bin/sqoop list-databases --connect jdbc:mysql://210.114.91.91:20481/?useSSL=false --username 'hadoop' --password 'Pa$$w0rd123' // 강사님 서버 
+
+
+$ wget https://github.com/datacharmer/test_db/archive/master.zip
+# yum install unzip
+$ unzip master.zip
+cd test_db-master
+mysql -u root -p < employees.sql
+
+Data(employees.employess) 
+-> hdfs(sqoopMySqlToHdfs)
+
+./bin/sqoop import --connect jdbc:mysql://210.114.91.91:20527/employees?useSSL=false --username 'hadoop' --password 'Pa$$w0rd123' --table employees -m 1 --target-dir /user/hadoop/sqoopMySqlToHdfs3
+
+./bin/hadoop fs -cat sqoopMySqlToHdfs/*
+
+./bin/sqoop export --connect jdbc:mysql://210.114.91.91:20481/employees?useSSL=false --username 'hadoop' --password 'Pa$$w0rd123' --table employees2 -m 1 --export-dir /user/hadoop/sqoopMySqlToHdfs3/part-m-00000
+
+Flume : Event Streaming...
+Kafka : 
+cpu 2
+ram 4
+map task 2, reduce task 2
+
+cpu 4
+ram 8
+map task 2, reduce task 2

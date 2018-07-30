@@ -1,0 +1,62 @@
+Apache WebServer
+# yum -y install httpd 
+# systemctl start httpd
+# systemctl enable httpd
+# systemctl status httpd
+# systemctl stop httpd
+
+
+* Data Server
+- sender.conf 
+SenderAgent.sources = WebServer
+SenderAgent.sinks = AvroSink
+SenderAgent.channels = MemChannel
+SenderAgent.sources.WebServer.type = exec
+SenderAgent.sources.WebServer.command = tail -f /etc/httpd/logs/access_log
+SenderAgent.sources.WebServer.batchSize = 1
+SenderAgent.sources.WebServer.interceptors = itime
+SenderAgent.sources.WebServer.interceptors.itime.type = timestamp
+SenderAgent.sinks.AvroSink.type = avro
+SenderAgent.sinks.AvroSink.hostname = 192.168.111.128
+SenderAgent.sinks.AvroSink.port = 4545
+SenderAgent.channels.MemChannel.type = memory
+SenderAgent.sources.WebServer.channels = MemChannel
+SenderAgent.sinks.AvroSink.channel = MemChannel
+
+
+./bin/flume-ng agent --conf-file conf/sender.conf --name SenderAgent -Dflume.root.logger=INFO,console
+
+
+
+# WebServer(Accesslog) -> Channel(Memory) -> Avro : 4545 (Data)
+# Avro : 4545 -> Channel(Memory) -> Hdfs (Server01)
+
+-> receiver.conf
+ReceiverAgent.sources = AvroSource
+ReceiverAgent.sinks = HDFS
+ReceiverAgent.channels = MemChannel
+ReceiverAgent.sources.AvroSource.type = avro
+ReceiverAgent.sources.AvroSource.bind = 0.0.0.0
+ReceiverAgent.sources.AvroSource.port = 4545
+ReceiverAgent.sinks.HDFS.type = hdfs
+ReceiverAgent.sinks.HDFS.hdfs.fileType = DataStream
+ReceiverAgent.sinks.HDFS.hdfs.rollCount = 1000
+ReceiverAgent.sinks.HDFS.hdfs.path = hdfs://localhost:9000/user/hadoop/flume_httpd_logs/
+ReceiverAgent.channels.MemChannel.type = memory
+ReceiverAgent.sources.AvroSource.channels = MemChannel
+ReceiverAgent.sinks.HDFS.channel = MemChannel
+
+
+
+
+flume-ng agent --conf-file $FLUME_HOME/conf/receiver.conf --name ReceiverAgent -Dflume.root.logger=INFO,console
+
+scp -r apache-flume-1.8.0-bin 192.168.111.160:/home/hadoop/
+
+bin/flume-ng agent --conf-file conf/flume-conf.properties --name SenderAgent -Dflume.root.logger=INFO,console
+
+
+
+
+
+

@@ -1,0 +1,50 @@
+kafka console producer
+
+->topic testkafka2
+kafka broker(cluster)
+
+flume 
+ -Source : kafka topic
+ -Channel : memory
+ -Sink : hdfs
+
+hdfs(start-dfs.sh)
+-/user/hadoop/kafka/testkafka2/2018-07-09
+
+* Creating a topic
+bin/kafka-topics.sh --create --zookeeper Server01:2181, Server02:2181, Server03:2181 --replication-factor 3 --partitions 1 --topic testkafka2
+
+* Executing kafka console producer
+bin/kafka-console-producer.sh --broker-list Server01:9092,Server02:9092,Server03:9092 --topic testkafka2
+
+* Executing Flume Agent 
+- AgentKafka.conf
+
+Agent1.sources  = kafkaSource
+Agent1.channels = hdfsChannel
+Agent1.sinks    = hdfsSink
+Agent1.sources.kafkaSource.type = org.apache.flume.source.kafka.KafkaSource
+Agent1.sources.kafkaSource.zookeeperConnect = Server01:2181,Server02:2181,Server03:2181
+Agent1.sources.kafkaSource.topic = testkafka2
+Agent1.sources.kafkaSource.batchSize = 100
+Agent1.sources.kafkaSource.channels = hdfsChannel
+
+Agent1.channels.hdfsChannel.type   = memory
+Agent1.sinks.hdfsSink.channel = hdfsChannel
+Agent1.sinks.hdfsSink.type = hdfs
+Agent1.sinks.hdfsSink.hdfs.writeFormat = Text
+Agent1.sinks.hdfsSink.hdfs.fileType = DataStream
+Agent1.sinks.hdfsSink.hdfs.filePrefix = test-events
+Agent1.sinks.hdfsSink.hdfs.useLocalTimeStamp = true
+Agent1.sinks.hdfsSink.hdfs.path = hdfs://Server01:9000/user/hadoop/kafka/%{topic}/%y-%m-%d
+Agent1.sinks.hdfsSink.hdfs.rollCount=100
+Agent1.sinks.hdfsSink.hdfs.rollSize=0
+Agent1.channels.hdfsChannel.capacity = 10000
+Agent1.channels.hdfsChannel.transactionCapacity = 1000
+
+./bin/flume-ng agent --conf-file conf/AgentKafka.conf --name Agent1 -Dflume.root.logger=INFO,console
+
+
+kafka stream kafka connector 를 이용하여 데이터를 주고 받을 수 있다. 
+위에는 이것들을 쓰지 않고 플럼과 카프카를 연결하여 사용 했다. 
+일단 카프카로 브로커 서버를 만든뒤에 플럼과 카프카를 연결 시켰다. 

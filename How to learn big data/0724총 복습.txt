@@ -1,0 +1,104 @@
+hostname
+hosts
+ip address
+vi /et/sysconfig/network-scripts/ifcfg-ens33
+여기서 onboot yes -> ifconfig에 ip가 뜨게 된다.
+bootproto는 none 이 되어야 한다 
+그리고 netmask를 255.255.255.0으로
+ifconfig not found -> yum install net-tools  
+
+*하둡 설치 전 요구사항 
+oracle jdk 1.8install -> /usr/java/default 
+다른 open jdk는 조금 다르게 설정 할 수도 있다
+ssh-key 설치 -> server02, server03 
+protobuf 설치 그뒤 -> developement tool 도설치 
+
+hadoop-env.sh 에서 JAVA_HOME을 설정 해주고
+-HADOOP_PID_DIR을 재설정 
+-master,slaves 
+-corem ,hdfs, mapred,yarn을 설정
+
+**Hadoop HA(zookeeper)
+/home/hadoop/zookeeper-3.4.10/data myid 수정 
+그리고 core-site에 cluster 이름 추가 
+및 url변경 
+그뒤 hdfs-site.xml을 변경 
+hdfs zkfc -formatZK 이것을 한뒤에 zkCli.sh
+ls /  - > [zookeeper, hadoop-ha, hbase]
+이것은 zookeeper 와 hadoop-ha, hbase가 만들어져 있다는 것을 의미 
+firewall 설정 
+disable로 걸어 잠글것 (재시작시 시작되지 않음)
+zkCli.sh 는 현재 주키퍼와 연결된 여러가지 상태를 보여줄수 있음을 의미
+그뒤 저널노드를 실행 -> namenode 포멧 후 네임노드 실행 및 zkfc  실행 
+데이터 노드를 실행한 후 두번째 서버에서 namenode를 bootstrapstandby로
+설정하고 네임노드 실행 및 zkfc 실행 
+이제 yarn을 실행하고 마친다. 
+
+mysqld_safe --skip-grant-tables & 
+mysql -u root 
+mariaDB [(none)]> use mysql;
+mariaDB [(none)]> update user set password=PASSWORD("NEWPASSWORD") where 
+User='root';
+MariaDB > flush privileges;
+#systemctl restart mariadb 
+
+
+
+**hbase와 ha함께사용 
+hbase-site.xml에서 
+hdfs://kch:9000을 -> hdfs://kch-cluster로 변경 
+
+#Hadoop
+export HADOOP_HOME=/home/kch/hadoop-2.7.6
+export HADOOP_INSTALL=$HADOOP_HOME
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export YARN_HOME=$HADOOP_HOME
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export HADOOP_OPTS="-Djava.library.path=$HADOOP_COMMON_LIB_NATIVE_DIR"
+export HADOOP_PID_DIR=${HADOOP_HOME}/pids
+export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin:
+export CLASSPATH=$CLASSPATH:$HADOOP_HOME/lib/*:
+
+export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
+export YARN_CONF_DIR=$HADOOP_HOME/etc/hadoop
+
+그리고 start-hbase.sh server01
+hbase-daemon.sh start regionserver(Server02,03)
+http://server01:16010
+hbase shell 
+list 
+create 'test', 'cf'
+put 'test', 1, 'cf:name', 'hong'
+
+Flume 
+hbase.conf 부터 
+agent1.sources = netcat1
+agent1.sinks = hbase1
+agent1.channels =memory1
+
+agent1.sources.netcat1.type = netcat
+agent1.sources.netcat1.bind = localhost
+agent1.sources.netcat1.port = 4545
+
+agent1.sinks.hbase1.type=hbase
+agent1.sinks.hbase1.table=test
+agent1.sinks.hbase1.columnFamily=cf1
+agent1.sinks.hbase1.serializer=org.apache.flume.sink.hbase.SimpleHbaseEventSerializer
+
+agent1.channels.memory1.type = memory
+agent1.channels.memory1.capacity = 1000
+agent1.channels.memory1.transactionCapacity = 100
+
+agent1.sources.netcat1.channels = memory1
+agent1.sinks.hbase1.channel=memory1
+
+hbase에 create 'test', 'cf1'을 생성하고 해야함
+
+실행 명령어
+ ./bin/flume-ng agent --conf/hbase.conf --name agent1 -Dflume.root.logger=INFO,console
+
+텔넷 연결 
+telnet> curl telnet://localhost:4545 여기서 명령어를 던지면 hbase와 sink가 되도록 flume을 이용 
+

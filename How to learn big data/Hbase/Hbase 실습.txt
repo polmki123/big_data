@@ -1,0 +1,82 @@
+Amazon Webservice 
+Azure(Microsoft) -> www.azure.com
+Google Cloud
+
+portal.azure.com (애저)
+
+52.231.68.122
+id : dennis1945
+pwd : Pa$$w0rd123!@#
+
+https://dennis1945.azurehdinsight.net
+id : admin
+pwd : Pa$$w0rd123!@#
+
+dennis1945-ssh.azurehdinsight.net
+id : sshuser
+pwd : Pa$$w0rd123!@#
+hadoop fs -ls /
+
+
+
+2 nodes (NameNode 2EA)
+4 nodes (DataNode 4EA)
+
+hdfs dfsadmin -report
+HDFS(Hadoop Distributed File System)
+- txt, jpg, mpg, xls, csv, json...
+
+* hbase
+$ tar xvfz hbase...
+$ cd hbase-1.2.6
+$ cd conf
+$ vi hbase-env.sh
+export JAVA_HOME=/usr/java/default
+$ cd ~
+$ mkdir hbase
+$ cd hbase
+$ mkdir files
+$ pwd 
+  /home/hadoop/hbase/files
+$ cd ~/hbase-1.2.6/conf
+
+1. StandAlone Mode (zookeeper(x))
+2. Pseudo-Distributed Mode (HDFS(o)
+3. Full-Distributed Mode (Zookeeper(o), HDFS(o))
+stand alone
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+        <property>
+        <name>hbase.rootdir</name>
+        <value>file:/home/hadoop/hbase/hfiles</value>
+        </property>
+        <property>
+        <name>hbase.zookeeper.property.dataDir</name>
+        <value>/home/hadoop/zookeeper/data</value>
+        </property>
+</configuration>
+
+cd ~
+with hadoop stand alone
+vi .bash_profile
+
+가상 분산 모드 
+vi hbase-site.xml
+<property>
+   <name>hbase.rootdir</name>
+   <value>hdfs://Server04:9000/hbase</value>
+</property>
+<property>
+   <name>hbase.cluster.distributed</name>
+   <value>true</value>
+</property>
+<property>
+	<name>hbase.zookeeper.property.dataDir</name>
+    <value>/home/hadoop/zookeeper</value>
+</property>
+start-hbase.sh
+
+HMaster
+HRegionServer
+HQuorumPeer

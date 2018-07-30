@@ -1,0 +1,445 @@
+Java -> scala 
+새롭게 eclipse 전용 리눅스 설치시 일단
+설치 프로세스 선택 kdump와 인터넷, 시스템 관리 도구, 개발용 도구
+kdump 비활성 
+jvm java와 동일한 컴파일 모델을 가짐
+스칼라의 특징 
+	객체 지향적 
+	간결함 
+	정적함수
+	컴파일 사이즈가 작음
+	동시 처리 및 동기화 처리 수행 가능 
+	함수형 언어의 특징을 가짐  
+
+자바와 비교되는 특징
+	Type inference 
+	Traits 추가 되는 것만 추가적으로 구현하면 되는 특징 
+	Concurrency 
+	Clouser = 함수 그러나 형식이 다르다. 
+jvm 
+
+intellj id, eclipse ide
+
+eclipse ide 설치 
+여기서 http://scala-ide.org/download/current.html
+http://download.scala-ide.org/sdk/lithium/e47/scala212/stable/site이것을 복사 한뒤에 
+help install 붙여 넣기 그리고 select all
+
+설치가 완료시에 new project에서 scala wizard를 클릭 
+
+touch ScalaHelloWorld.scala
+
+object ScalaHelloWorld {
+	def main(args :Array[String]){
+		println("HelloWorld")
+	}
+}
+
+scalac ScalaHelloWorld 로 컴파일을 실행 한다. 
+
+대화식 모드 
+
+scala라고 치면 줄줄이 작성 가능한 모드가 됨 
+
+var test1 =1 변경 가능한 변수 
+val b =2 는 병경 이 가능하지 않음 
+;는 굳이 쓰지 않으나 문장 구별시에는 사용 
+$wefem,123test, __1_tst
+
+package com.test
+
+---------------------------------
+package com.test2
+
+object Test2{
+	def add(a : Int, b:Int) : Int = {
+		var c : Int = 0
+		c = a + b
+		return c
+
+	{
+/	{
+/		var a =1
+/		var b: Int = 2
+/		var c = "Hello"
+/		vaf d : String = "hello"
+/	}
+}		
+
+---------------------------------
+
+object Test3{
+	def substract(a : Int, b:Int) : Int = {
+		var c : Int = 0
+		c = a - b
+		return c }
+}
+----------------------------------------------
+package com.test
+
+import com.test2.Test2
+
+import com.test2.Test22 여기서 class를 사용하기 위해 선언 했지만 바로 뜨지 않는다.
+
+object Test1{ //자바와는 다르게 항목을 object로 선언해서 사용 
+	def main(args:Array[String]){ // main method 호출시 무조건 object로 실행 
+		var c : Int = Test2.add(1,2) 따로 object를 선언하지 않아도 사용 가능
+		println(c)
+		var o = new Test22() 클래스를 이렇게 객채화 하여 사용 하는 것이 object와의 큰 차이점 그리고 자바에서처럼 Test c = new Test() 이런식으로 사용하지 않아도 작성 가능 하다는 것이 큰 차이다. 
+		o.multiply(12,2) 
+	}
+}
+------------------------------------------------
+package com.test2
+
+class Test22{ //class로 선언해서 사용 object와는 다른 의미 
+	def multiply(a : Int, b:Int) : Int = {
+		var c : Int = 0
+		c = a * b
+		return c
+
+	}
+}
+
+----------------------------------------
+package com.test 
+
+object NTest1{
+	def main(args:Array[String]){
+	var myVar : Int = 100;
+	val myVal : String = "Hi"
+	var myVar1 = 20;	
+	val myVal1 = "Test Hi"
+
+	var o = new Employee()
+	o.gotoWork("John",30)
+	}
+}
+
+-------------------------------------
+package com.test
+
+class Employee {
+	var name : String = " "
+	var age : Int = 0
+	def gotoWork( nm:String, ag :Int){
+		name = nm
+		age = ag
+		println(name)
+		println(age)
+
+	}
+}
+압축 풀고  기존 경로 에서 import 로 가서 -> general
+
+
+singleton 객체 
+
+class Employee
+
+-> new Employee()
+
+Singleton 따로 명시를 안해도 바로 되는 기능 object 처럼 
+
+object Test{
+	def main(arg:Array[String]){
+		var num : Int = 10 
+
+		If (num % 2 == 0){
+			println("Even")
+		}else {
+			println("Odd")
+		}
+		var num2 : Int = 50
+		if(num2>= 0 && num2<50){
+			println("F")
+		}else if (num2>=50 && num2<60){
+			println("D")
+		}
+		var r = check(-100)
+		println(r)
+	}
+	def check(a : Int) = if (a >=0) 1 else -1
+}
+
+crtl + shift + f 하면 줄이 다 정리가 됨 
+
+object cal {
+	def main[args : Array[String]){
+	
+		var i = 10
+		while(i<30){
+			println("Value of i : " + i)
+			i = i+ 1
+		}
+		do {
+			println(i)
+			i = i + 1
+		}while(i < 300)
+	}
+}	
+
+-----------------------------
+
+package com.test
+
+object Test3{
+	def main(args:Array[String]){
+		for( a < -1 to 10 if a % 2== 0){
+			println(a)
+		}
+		var list = List(1,2,3,4,5,6)
+		for(i <- list){
+			println(i)
+		}
+	}
+}
+---------------------------------------
+
+package com.test
+
+object Test1P{
+	def main(args : Array[String]){
+		var r = check(10)
+		println(r)
+	}
+	def check(a:Int) : Int = {
+		var c : Int = 0
+		if (a >= 0) {
+		return 1
+		}
+		else {
+			return -1
+		}
+	}
+	def check1(a:Int) = if (a>=0) 1 else -1
+}
+---------------------------------------------
+object Test2{
+	def main(args : Array[String]) {
+		var a =10
+		a match {
+			case 10 => println("10")
+			case 20 => println("20")
+			case _ => prinln("Nothing")
+		}
+		checkvalue(1)
+	}
+	def checkvalue(a:Any):Any = a match{// 아무 타입이나 주고 싶을 때 사용 
+		case 1 => println("1")
+		case "One" => println("one")
+		case "Two" => println("Two")
+		case _ => println("Nothing")
+	}
+	
+}
+
+-------------------------------------------
+
+import scala.util.control.Breaks.
+object Test3{
+	def main(args:Array[String]) {
+		breakable{ // 실행시 종료가 가능하게 해주는 함수 
+			for(i <- 1 to 10 by 2){
+				if(i == 7) {
+					break
+				}
+				else {
+					println(i)
+				}
+			}
+		}
+	}
+}
+
+----------------------------------------
+object Test4{
+	def main(args:Array[String]) {
+		var r = testMsg()
+		println(r)
+		var r2 = testMsg2() // 여기서 마지막 함수 값만 들어 가게 된다. 
+		println(r2)
+	}
+	def testMsg(){ // 이경우 호출시 print문만 호출 된다. 
+		println("Test Msg")
+		var i = 10
+	}
+	def testMsg2() = { // " = " 이 있으면 마지막에 있는 것의 값이 남는다. 
+		println("Test Msg")
+		var i = 10
+		i
+	}
+}
+출력은 "Test msg" 10이 차례로 출력된다. 
+--------------------------------------
+
+object Test5{
+	def main(args:Array[String]) {
+		var r = add(1,2)
+		println(r)
+	}
+	def add(a :Int, b : Int) = {
+		var c = a + b
+		//println(c)
+		c
+	}
+}
+----------------------------------------------
+스칼라는 static 언어가 없다. 
+//companion은 이름이 같은 object,class를 의미한다. 
+// companion class
+class Test1{
+	def testMetho2(){
+
+	}
+}
+//companion object 자바로 치면 거의 스테틱 object은 class와는 다르게 명시해서 쓰지
+않는다. 
+
+class Dog(name: String) {
+  private val color = "black"
+  def bark = println("bark! bark!")
+}
+
+object Dog {
+  val dog = new Dog("dog2")
+  dog.color // 아무런 문제가 없다.
+  dog.name // 접근 불가능
+}
+
+object Test1{
+	def testMethod(){
+	}
+	def main(args:Array[String]) {
+		var s = Test1()
+	}
+	//혹은 
+	new Test_1.testMethod2() 이렇게 사용 
+}
+-------------------------------------------
+
+object Test1{
+	def main(args : Array[String]){
+		
+	}
+	def testMsg() : Unit = { //void라는 뜻 
+	}
+}
+---------------------------
+def testMsg2(a: Any) : Any = {
+	// 모든 타입을 다 받을 수 있다는 뜻 
+}
+
+---------------------------------
+
+class TestCl {
+	private def testMehod(){
+		println("test")
+	}
+	def testMethod2(){
+		println("test2")
+	}
+
+	}
+	object Test1{
+		def main(args:Array[String]){
+			var obj = new TestCls()
+			obj.testMehod()
+		}
+	}
+}
+---------------------------------
+package com.test
+
+object TestCl {
+  def main(args:Array[String]){
+    func1(20, multiply)
+    var t = (x:Int) => x+1
+    var t2 = (x:Int,y:Int) => x*y // 이렇게 함수를 간단하게 지정해서 사용 가능 익명함수 
+    println(t2(1,2))
+  }
+  def func1(a:Int, f:Int => AnyVal // f의 결과값을 anyVal로 나타나겠다. ) : Unit = {
+    println(f(a))
+  }
+  def multiply(a:Int):Int = {
+    a*2
+  }
+}
+--------------------------------------
+package com.test
+
+object Test3 {
+  def main(args: Array[String]) {
+무명함수 = Anonymous Function = Rambda Expression = Delegate = Function Ref 
+    var a = (b: Int, c: Int) => b + c
+    println(a(2, 3))
+	var r2 = (_:Int) + (_:Int) // 이것도 좀 특이 
+	var r3 = add(1)(2)
+	var r4 = r3(2)
+  }
+	def add(a:Int, b:Int) = {
+	a+b
+	}
+}
+
+---------------------------------------------
+
+package com.test
+
+class Employee(name:String, age:Int){
+  var nm = name
+  var ag = age
+  var id = 0
+  def getEmpInfo(){
+    println("name:" +nm + ",age:" +ag)
+  }
+  def this( name :String, age:Int, id:Int){ // 이 this는 object에서는 절대로 쓰지 않는다. 
+    this(name, age)
+    this.id = id
+	}
+}
+object Test4 {
+  def main(args:Array[String]){
+    var e = new Employee("Tom", 20)
+    var a = e(10)
+  }
+}
+---------------------------------------------
+package com.test
+
+class Employee2 {
+  var id:Int = 0
+  var name:String = ""
+  
+  def this(id:Int, name:String){ // 마치 python의 self와 비슷한 기능으로 작동한다. 
+    this()
+    this.id = id
+    this.name = name
+  }
+  def show(){println(this.id + "," + this.name)}
+}
+object Test6 {
+  def main(args:Array[String]){
+    var t = new Employee2(101, "Top")
+    t.show()
+  }
+}
+
+------------------------------------------
+package com.test
+
+class Student{
+  var name:String = "Hong Gil Dong"
+}
+
+class HighStudent extends Student{
+  var location:String = "Seoul"
+  println("name=" + name)
+  println("location = "+location)
+}
+object Test7 {
+  def main(args:Array[String]){
+    new HighStudent()
+  }
+}
+// Single, Multilevel, Hierarchical, Multiple, Hybrid 

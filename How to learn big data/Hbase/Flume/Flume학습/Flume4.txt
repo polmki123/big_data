@@ -1,0 +1,74 @@
+접속 된 링크에 대해서 실시간으로 보내 준다. 
+sender ---- receiver 구성 Avro 형태를 맞춰주기 위한 규약? 
+ 
+
+서버를 두개로 하여 작동 되게 한다. sender -receiver 구조 
+
+Apache WebServer 웹 서버 다운 및 설정 
+# yum -y install httpd 
+# systemctl start httpd // http://server02 하면 서버가 뜸 
+# systemctl enable httpd
+# systemctl status httpd
+# systemctl stop httpd
+
+배치성으로 데이터를 받는 것 에이전트로 데이터를 받는 것 두가지 방법 이 있다. 
+
+* Data Server
+- sender.conf 
+SenderAgent.sources = WebServer
+SenderAgent.sinks = AvroSink
+SenderAgent.channels = MemChannel
+SenderAgent.sources.WebServer.type = exec
+SenderAgent.sources.WebServer.command = tail -f /etc/httpd/logs/access_log
+%바뀌는 족족 보여주기 위해 
+SenderAgent.sources.WebServer.batchSize = 1
+SenderAgent.sources.WebServer.interceptors = itime
+SenderAgent.sources.WebServer.interceptors.itime.type = timestamp
+SenderAgent.sinks.AvroSink.type = avro
+
+%받는 쪽 ip를 참고 
+SenderAgent.sinks.AvroSink.hostname = 192.168.111.128
+SenderAgent.sinks.AvroSink.port = 4545
+
+SenderAgent.channels.MemChannel.type = memory
+SenderAgent.sources.WebServer.channels = MemChannel
+SenderAgent.sinks.AvroSink.channel = MemChannel
+
+
+./bin/flume-ng agent --conf-file conf/sender.conf --name SenderAgent -Dflume.root.logger=INFO,console
+
+
+
+# WebServer(Accesslog) -> Channel(Memory) -> Avro : 4545 (Data)
+# Avro : 4545 -> Channel(Memory) -> Hdfs (Server01)
+
+
+-> receiver.conf
+ReceiverAgent.sources = AvroSource
+ReceiverAgent.sinks = HDFS
+ReceiverAgent.channels = MemChannel
+ReceiverAgent.sources.AvroSource.type = avro
+
+%아무쪽에나 다 받을 수 있음으로 이렇게 설정 
+ReceiverAgent.sources.AvroSource.bind = 0.0.0.0
+ReceiverAgent.sources.AvroSource.port = 4545
+ReceiverAgent.sinks.HDFS.type = hdfs
+ReceiverAgent.sinks.HDFS.hdfs.fileType = DataStream
+ReceiverAgent.sinks.HDFS.hdfs.rollCount = 1000
+ReceiverAgent.sinks.HDFS.hdfs.path = hdfs://localhost:9000/user/hadoop/flume_httpd_logs/
+ReceiverAgent.channels.MemChannel.type = memory
+ReceiverAgent.sources.AvroSource.channels = MemChannel
+ReceiverAgent.sinks.HDFS.channel = MemChannel
+리시버 쪽 명령어 이럴 경우 대기 상태로 전환하게 됨 
+flume-ng agent --conf-file $FLUME_HOME/conf/receiver.conf --name ReceiverAgent -Dflume.root.logger=INFO,console
+
+
+scp -r apache-flume-1.8.0-bin 192.168.111.160:/home/hadoop/
+
+bin/flume-ng agent --conf-file conf/flume-conf.properties --name SenderAgent -Dflume.root.logger=INFO,console
+
+
+
+
+
+

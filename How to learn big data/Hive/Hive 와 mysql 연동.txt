@@ -1,0 +1,96 @@
+Hive sql 언어
+먼저 database를 만든다 
+
+create database test;
+테이블 생성 언어 
+create table employee(emp_no int, birth_date String, first_name String, last_name String, gender String, hire_date String) Row FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' STORED AS TEXTFILE;
+
+
+현 지역 내 데이터 업데이트 
+LOAD DATA LOCAL INPATH '/home/hadoop/employees2.txt' 
+OVERWRITE INTO TABLE employee;
+
+
+select gender, count(*) from employees group by gender;
+
+예제 2 
+
+* emp_data.txt
+Michael|Montreal,Toronto|Male,30|DB:80|Product:Developer Lead
+Will|Montreal|Male,35|Perl:85|Product:Lead,Test:Lead
+Shelley|New York|Female,27|Python:80|Test:Lead,COE:Architect
+Lucy|Vancouver|Female,57|Sales:89,HR:94|Sales:Lead
+
+internal 
+CREATE TABLE IF NOT EXISTS employee_internal 
+(
+  name string,
+  work_place ARRAY<string>,
+  sex_age STRUCT<sex:string,age:int>,
+  skills_score MAP<string,int>,
+  depart_title MAP<STRING,ARRAY<STRING>>
+)
+COMMENT 'This is an internal table'
+ROW FORMAT DELIMITED // 어떻게 table을 저장할지 명시0
+FIELDS TERMINATED BY '|' // 필드를 | 로 나누고 
+COLLECTION ITEMS TERMINATED BY ',' // 합쳐진 데이터는 , 로 나누고 
+MAP KEYS TERMINATED BY ':' // 
+STORED AS TEXTFILE;
+
+LOAD DATA LOCAL INPATH '/home/hadoop/emp_data.txt' OVERWRITE INTO TABLE employee_internal;
+
+external 
+--Create external table and load the data
+
+CREATE EXTERNAL TABLE IF NOT EXISTS employee_external
+ (
+   name string,
+   work_place ARRAY<string>,
+   sex_age STRUCT<sex:string,age:int>,
+   skills_score MAP<string,int>,
+   depart_title MAP<STRING,ARRAY<STRING>>
+ )
+COMMENT 'This is an external table'
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+COLLECTION ITEMS TERMINATED BY ','
+MAP KEYS TERMINATED BY ':'
+STORED AS TEXTFILE
+LOCATION '/user/hadoop/emp_data.txt';
+
+LOAD DATA LOCAL INPATH '/home/hadoop/emp_data.txt' OVERWRITE INTO TABLE employee_external;
+
+--Create partition table DDL
+CREATE TABLE employee_partitioned
+(
+  name string,
+  work_place ARRAY<string>,
+  sex_age STRUCT<sex:string,age:int>,
+  skills_score MAP<string,int>,
+  depart_title MAP<STRING,ARRAY<STRING>>
+)
+PARTITIONED BY (Year INT, Month INT)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+COLLECTION ITEMS TERMINATED BY ','
+MAP KEYS TERMINATED BY ':';
+
+--Show partitions
+SHOW PARTITIONS employee_partitioned;
+
+--Add multiple partitions
+ALTER TABLE employee_partitioned ADD 
+PARTITION (year=2014, month=11)        
+PARTITION (year=2014, month=12);
+//원하는 만큼 파티션을 나누고 이 데이터를 차근 차근 여러개의 디렉토리로 만들어서 
+저장 할 수 있다. 2014_11, 2014_12 가 생겨버림 
+SHOW PARTITIONS employee_partitioned;
+
+ALTER TABLE employee_partitioned DROP PARTITION (year=2014, month=11);
+
+SHOW PARTITIONS employee_partitioned;
+
+--Load data to the partition
+LOAD DATA LOCAL INPATH '/home/hadoop/emp_data.txt' 
+OVERWRITE INTO TABLE employee_partitioned
+PARTITION (year=2014, month=12);

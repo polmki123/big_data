@@ -1,0 +1,10 @@
+spark://kch:7077
+
+hadoop ha : hadoop-cluster
+namenode1 : kch Activie 8020
+hfs://kch:8020/user/hadoop
+hdfs://kch:8020/user/hadoop/user/hadoop/input_baby/baby_names.csv
+namenode2 : client1 Standy 8020
+
+hadoop etc/hadoop core-site.xml, hdfs-site.xml -> spark -> conf
+이렇게 하지 않으면 스파크에서 하둡을 인지 하지 못하는 크나큰 일이 발생
