@@ -1,0 +1,112 @@
+파이썬 함수
+import calc
+calc.add(1,2)
+from calc import add
+add(1,2)
+from calc import *
+add(1,2)
+
+module -> filename.py
+module = filename
+
+import module
+from module import def
+from module import *
+
+package -> modules in
+folder -> __init__.py
+mypackage/__init__.py
+	calc.py
+	...
+
+mypack 안에 calc.c, 넣고
+import mypackage.calc
+from mypackage import calc
+import mypackage
+
+PYTHONPATH
+
+test.py 	<- modul
+	<- execute
+
+
+def add(a,b) :
+        reutn a+b
+
+class Calc :
+        def execute(self,r):
+                reutnr r*2
+
+if __name__ == "__main__":
+        print("execute")
+        a = Calc()
+        a.execute(4)
+        print(add(2,4))
+##이렇게 main을 명시하면 수행모드 즉 ./test.py로도 사용 할 수 있다.
+
+List[]
+Tuple ()
+
+Modules -> file.py -> class, def...
+Packages -> folder -> files.py(modules),
+
+__init__.py
+
+import
+from import 
+
+main 
+
+import test -> no main 
+
+python test.py
+if __name__ = "__main__"
+
+./test.py
+#!/home/hadoop/anaconda3/bin/python
+
+sys.path
+
+/home/hadoop/testpython
+test.py
+mypackage/test1.py, test2.py
+
+패키지를 못 찾을 때
+
+>>sys.path.insert(0, '/home/hadoop/testpython')
+이런식으로 하면 인식이 가능하게 됨  
+
+
+import sys
+sys.path => PYTHONPATH
+
+pip -> site-packages 
+
+클래스에 대한 정보를 알아 볼 때 
+class Employee:
+    empCount = 0
+    
+    def __init__(self,name,salary):
+        self.name = name
+        self.salary = salary
+        Employee.empCount +=1
+        
+    def displayCount(self):
+        print(Employee.empCount)
+        
+    def displayEmployee(self):
+        print("name : " + self.name, ", salary", self.salary)
+    
+    def __del__(self):
+        class_name = self.__class__.__name__
+        print(class_name, "destoryed")
+        
+emp1 = Employee("Tom", 3000)
+emp1.displayEmployee()
+emp1.__del__()
+
+print("Employee.__doc__:", Employee.__doc__)
+print("Employee.__name__:", Employee.__name__)
+print("Employee.__module__:", Employee.__module__)
+print("Employee.__bases__:", Employee.__bases__)
+print("Employee.__dict__:", Employee.__dict__)

@@ -1,0 +1,10 @@
+파이썬 
+
+컴파일 형 언어x 
+인터 프린터 방식 
+script mode .py 	-> pycharm ....
+		-> Web UI ... jupyter notebook 
+
+jupyter notebook	--ip 0.0.0.0 --port 8888
+jupyter notebook --generate-config
+c.NotebookApp.notebook_dir = '/home/kch/jupyter'
