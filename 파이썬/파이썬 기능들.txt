@@ -1,0 +1,23 @@
+*Inheritance
+ -> Parent -> Child
+
+*Overriding Methods
+-> Inheritance -> between classes ->Same name  parameters, types
+동일한 method를 재 정의 
+
+*Overloading Methods
+- Same class -> Same name ->Different parameters, types 
+class Test2:
+    def testMethod(self, nmae ="Tom"):
+        print(name)
+        
+t= Test2()
+t.testMethod()
+t.testMethod("Amy")
+
+**Data Hiding 
+class Test:
+    __testvalue = 0-> 이렇게 하면 접근이 불가능 해진다. 
+    
+t = Test()
+t.testvalue -->출력 x 

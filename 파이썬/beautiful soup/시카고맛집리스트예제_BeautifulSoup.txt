@@ -1,0 +1,8 @@
+conda install -c conda-forge folium
+conda install -c conda-forge googlemap
+
+google map을 깔기 위해서는 다른 방식을 이용 
+인터넷에 google cloud developer free로 검색 및 GCP Free 접속 
+여기서 가입 후 
+search 에 geolocation API ,geocoding API를 이용 그리고 사용자 인증정보로 가서 
+key를 geolocation으로 설정해서 사용 하면 된다. 

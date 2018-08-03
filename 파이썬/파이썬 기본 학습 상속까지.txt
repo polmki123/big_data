@@ -79,6 +79,14 @@ mypackage/test1.py, test2.py
 
 import sys
 sys.path => PYTHONPATH
+인식 시키는 방법 
+import sys
+sys.path
+sys.path.insert(0, '/home/kch/testpython')
+sys.path
+import mypackage
+from mypackage import calc
+calc.add(2,1)
 
 pip -> site-packages 
 
@@ -110,3 +118,29 @@ print("Employee.__name__:", Employee.__name__)
 print("Employee.__module__:", Employee.__module__)
 print("Employee.__bases__:", Employee.__bases__)
 print("Employee.__dict__:", Employee.__dict__)
+
+파이썬은 패키지로 들어갈때와
+자체적으로 불러 올 떄는 극명 하게 다른다. 
+
+if __name__ == "__main__" :
+
+else
+이렇게 사용하는 경우 
+직접 사용할때와 불러서 사용할때 달라 진다. 직접 사용할 경우 
+if구문을 불러서 사용할 경우 else 구문이 실행된다. 
+
+파이썬 상속 방법 
+class Parent:
+    parentAttr = 100
+    def __init__(self):
+        print("parent constructor")
+    def parentMethod(self):
+        print("parent method")
+    def parentMethod2(self,name):
+        print("parent name:", Parent.parentAttr)
+
+class Child(Parent):
+    def __init__(self):
+        print("Child constructor")
+    def childMethod(self):
+        print("child method")
